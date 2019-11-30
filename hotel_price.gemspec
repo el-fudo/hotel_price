@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Scraping Library to get world hotel price}
   spec.description   = %q{Empower World Travel Information Technology }
-  spec.homepage      = "https://twitter.com/Fumitas"
+  spec.homepage      = "https://github.com/el-fudo/hotel_price"
   spec.license       = "MIT"
   spec.metadata = { "source_code_uri" =>"https://github.com/el-fudo/hotel_price" }
   # spec.metadata["allowed_push_host"] = "https://hotel.el-soul.com"

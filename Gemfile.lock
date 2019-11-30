@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    hotel_price (0.1.6)
+    hotel_price (0.1.7)
 
 GEM
   remote: https://rubygems.org/
