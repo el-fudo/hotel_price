@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require 'hotel_price'
 
 puts HotelPrice.greet
