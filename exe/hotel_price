@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 require 'hotel_price'
 
-puts HotelPrice.greet
+puts HotelPrice.rakuten_travel
