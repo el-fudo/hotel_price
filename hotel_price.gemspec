@@ -12,6 +12,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{Empower World Travel Information Technology }
   spec.homepage      = "https://twitter.com/Fumitas"
   spec.license       = "MIT"
+  spec.metadata    = { "source_code_uri" => "https://github.com/el-fudo/hotel_price" }
 
 
 
