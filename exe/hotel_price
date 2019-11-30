@@ -1,0 +1,3 @@
+require 'hotel_price'
+
+puts HotelPrice.greet
