@@ -5,16 +5,19 @@ require "hotel_price/version"
 Gem::Specification.new do |spec|
   spec.name          = "hotel_price"
   spec.version       = HotelPrice::VERSION
-  spec.authors       = ["FUMI"]
+  spec.authors       = ["el-fudo"]
   spec.email         = ["fumitake.kawasaki@el-soul.com"]
 
   spec.summary       = %q{Scraping Library to get world hotel price}
   spec.description   = %q{Empower World Travel Information Technology }
   spec.homepage      = "https://twitter.com/Fumitas"
   spec.license       = "MIT"
-  spec.metadata    = { "source_code_uri" => "https://github.com/el-fudo/hotel_price" }
 
+  spec.metadata["allowed_push_host"] = "https://hotel.el-soul.com"
 
+  spec.metadata["homepage_uri"] = spec.homepage
+  spec.metadata["source_code_uri"] = "https://github.com/el-fudo/hotel_price"
+  spec.metadata["changelog_uri"] = "https://github.com/el-fudo/hotel_price"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
