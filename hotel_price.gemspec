@@ -5,7 +5,7 @@ require "hotel_price/version"
 Gem::Specification.new do |spec|
   spec.name          = "hotel_price"
   spec.version       = HotelPrice::VERSION
-  spec.authors       = ["el-fudo"]
+  spec.authors       = ["Fumitake Kawasaki"]
   spec.email         = ["fumitake.kawasaki@el-soul.com"]
 
   spec.summary       = %q{Scraping Library to get world hotel price}
