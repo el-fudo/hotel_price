@@ -15,6 +15,7 @@ module HotelPrice
     comment_area = driver.find_elements(:class_name, "commentReputationBoth")
     data = comment_area.map do |f|
       {
+        status: "success",
         date: f.find_element(class_name: "time").text,
         rakuten_hotel_id: 7770,
         comment: f.find_element(class_name: "commentSentence").text
