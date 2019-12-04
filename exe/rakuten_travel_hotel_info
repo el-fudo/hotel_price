@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require 'rakuten_travel'
+
+puts RakutenTravel.hotel_info ARGV[0]
