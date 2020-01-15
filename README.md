@@ -36,7 +36,7 @@ hotel = HotelPrice::RakutenTravel::RakutenAPI.new config
 
 Get Hotel Info
 
-```
+```ruby
 puts hotel.hotel_info
 ```
 
