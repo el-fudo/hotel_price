@@ -10,15 +10,15 @@ module HotelPrice
     options = Selenium::WebDriver::Firefox::Options.new
     options.add_argument("-headless")
     driver = Selenium::WebDriver.for :firefox, options: options
-    rakuten_travel_hotel_id = 7770
-    driver.get("https://travel.rakuten.co.jp/HOTEL/#{rakuten_travel_hotel_id}/review.html")
+    rakuten_travel_hotel_id = 128552
+    driver.get("https://travel.rakuten.co.jp/HOTEL/#{rakuten_travel_hotel_id.to_s}/review.html")
     sleep 2
     comment_area = driver.find_elements(:class_name, "commentReputationBoth")
-    data = comment_area.map do |f|
+    comment_area.map do |f|
       {
         status: "success",
         date: f.find_element(class_name: "time").text,
-        rakuten_hotel_id: 7770,
+        rakuten_hotel_id: rakuten_travel_hotel_id,
         comment: f.find_element(class_name: "commentSentence").text
       }
     end
