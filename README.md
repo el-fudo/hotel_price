@@ -6,7 +6,7 @@ This Gem is made for ppl who work at travel industry
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'hotel_price'
+gem "hotel_price"
 ```
 
 And then execute:
