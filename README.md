@@ -25,13 +25,13 @@ Or install it yourself as:
 
 ### Rakuten Travel
 
+#### Rakuten API
 Set `rakuten_hotel_id` 
 
 ```ruby
-config = {
-  rakuten_hotel_id: "128552"
-}
-hotel = HotelPrice::RakutenTravel::RakutenAPI.new config
+hotel = HotelPrice::RakutenTravel::RakutenAPI.new(
+  rakuten_hotel_id: "128552
+)
 ```
 
 Get Hotel Info
