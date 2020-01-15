@@ -23,7 +23,7 @@ Or install it yourself as:
 
 ## Usage
 
-Rakuten Travel 
+### Rakuten Travel
 
 Set Config
 
