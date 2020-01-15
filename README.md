@@ -25,11 +25,11 @@ Or install it yourself as:
 
 ### Rakuten Travel
 
-Set Config
+Set `rakuten_hotel_id` 
 
 ```ruby
 config = {
-  rakuten_hotel_id: "7770"
+  rakuten_hotel_id: "128552"
 }
 hotel = HotelPrice::RakutenTravel::RakutenAPI.new config
 ```
