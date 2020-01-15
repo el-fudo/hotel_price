@@ -1,4 +1,0 @@
-#!/usr/bin/env ruby
-require "rakuten_travel_review"
-
-puts RakutenTravelReview.rakuten_travel ARGV[0]
