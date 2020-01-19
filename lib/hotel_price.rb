@@ -24,23 +24,7 @@ module HotelPrice
     end
   end
 
-  module Jalan
-    class JalanConsole
-      def initialize params
-        @config = {
-          login_id: params[:login_id],
-          login_pw: params[:login_pw],
-          chain: params[:chain] ||= false,
-          jalan_hotel_id: params[:jalan_hotel_id] ||= 0,
-          jalan_api_key: params[:jalan_api_key] ||= ENV["JALAN_API_KEY"]
-        }
-      end
-  
-      def test
-        @config
-      end
-    end
-  end
+  require "jalan"
 
   module RakutenTravel
     def self.review rakuten_hotel_id

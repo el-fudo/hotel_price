@@ -46,16 +46,13 @@ RSpec.describe HotelPrice do
 
   describe "Jalan Class" do
     before(:each) do
-      @a1 = HotelPrice::Jalan::JalanConsole.new(
-        login_id: "login-xx",
-        login_pw: "pass-yy",
-        chain: true,
-        jalan_hotel_id: "128552"
-      )
+      api_key = "sco16771cc4c29"
+      @a1 = Jalan::JalanAPI.new api_key
     end
 
   
     it "Test" do
+      p @a1.test
       expect(@a1.test[:jalan_hotel_id]).to eq "128552"
     end
   
