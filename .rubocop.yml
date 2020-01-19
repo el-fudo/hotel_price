@@ -216,3 +216,6 @@ Naming/HeredocDelimiterNaming:
 
 Naming/AccessorMethodName:
   Enabled: false
+
+Style/MutableConstant:
+  Enabled: false
