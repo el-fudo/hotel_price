@@ -24,7 +24,6 @@ module HotelPrice
     end
   end
 
-  require "jalan"
 
   module RakutenTravel
     def self.review rakuten_hotel_id
