@@ -1,11 +1,6 @@
-module Jalan
-  class JalanAPI
-    def initialize api_key
-      @api_key = api_key
-    end
+require_relative "./jalan/jalan_api"
 
-    def test
-      @api_key
-    end
+module HotelPrice
+  module Jalan
   end
 end

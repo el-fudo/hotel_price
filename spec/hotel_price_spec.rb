@@ -14,24 +14,20 @@ RSpec.describe HotelPrice do
 
   describe "Rakuten Travel API" do
     before(:each) do
-      @a1 = HotelPrice::RakutenTravel::RakutenAPI.new(
+      @a1 = HotelPrice::Rakuten::RakutenAPI.new(
         rakuten_hotel_id: "128552"
       )
     end
 
     it "Test" do
-      expect(@a1.test[:rakuten_hotel_id]).to eq "128552"
-    end
-
-    it "Get Hotel Info by rakuten hotel id" do
-      expect(@a1.hotel_info[:rakuten_hotel_id].to_s).to eq "128552"
+      expect(@a1.instance_variable_get(:@config)[:rakuten_hotel_id]).to eq "128552"
     end
   end
 
 
   describe "Rakuten Travel Console" do
     before(:each) do
-      @a1 = HotelPrice::RakutenTravel::RakutenConsole.new(
+      @a1 = HotelPrice::Rakuten::RakutenConsole.new(
         login_id: "login-id",
         login_pw: "login-pw",
         rakuten_hotel_id: "128552",
@@ -39,8 +35,8 @@ RSpec.describe HotelPrice do
       )
     end
 
-    it "Test" do
-      expect(@a1.test[:rakuten_hotel_id]).to eq "128552"
+    it "should set Rakuten hotel ID" do
+      expect(@a1.instance_variable_get(:@config)[:rakuten_hotel_id]).to eq "128552"
     end
   end
 
@@ -51,9 +47,9 @@ RSpec.describe HotelPrice do
     end
 
   
-    it "Test" do
+    it "should set Jalan hotel ID" do
       p @a1.test
-      expect(@a1.test[:jalan_hotel_id]).to eq "128552"
+      expect(@a1.instance_variable_get(:@config)[:jalan_hotel_id]).to eq "128552"
     end
   
   end
