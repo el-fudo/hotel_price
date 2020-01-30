@@ -15,5 +15,15 @@ module HotelPrice::Rakuten
       driver.quit
       data
     end
+
+    def self.get_selenium_driver
+      # firefox_capabilities = Selenium::WebDriver::Remote::Capabilities.firefox
+      # @driver = Selenium::WebDriver.for(:remote, url: "http://hub:4444/wd/hub", desired_capabilities: firefox_capabilities)
+  
+      options = Selenium::WebDriver::Firefox::Options.new
+      options.add_argument("-headless")
+      Selenium::WebDriver.for :firefox, options: options
+    end
+    
   end
 end
