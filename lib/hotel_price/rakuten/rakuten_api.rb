@@ -2,8 +2,8 @@ module HotelPrice::Rakuten
   class RakutenAPI
     def initialize params
       @config = {
-          rakuten_hotel_id: params[:rakuten_hotel_id] ||= 0,
-          rakuten_api_key: params[:rakuten_api_key] ||= ENV["RT_API_KEY"]
+        rakuten_hotel_id: params[:rakuten_hotel_id] ||= 0,
+        rakuten_api_key: params[:rakuten_api_key] ||= ENV["RT_API_KEY"]
       }
     end
 
@@ -16,22 +16,22 @@ module HotelPrice::Rakuten
       @result["hotels"][0].each do |_key, field|
         field[0].each do |_, value|
           @data_hash = {
-              rakuten_hotel_id: value["hotelNo"],
-              hotel_name: value["hotelName"],
-              room_price_min: value["hotelMinCharge"],
-              lat: value["latitude"],
-              lon: value["longitude"],
-              tel: value["telephoneNo"],
-              zip_code: value["postalCode"],
-              prefecture: value["address1"],
-              address1: value["address2"],
-              fax: value["faxNo"],
-              access: value["access"],
-              parking_info: value["parkingInformation"],
-              near_station: value["nearestStation"],
-              hotel_img_url: value["hotelImageUrl"],
-              rakuten_review_count: value["reviewCount"],
-              rakuten_review_avg: value["reviewAverage"].to_f
+            rakuten_hotel_id: value["hotelNo"],
+            hotel_name: value["hotelName"],
+            room_price_min: value["hotelMinCharge"],
+            lat: value["latitude"],
+            lon: value["longitude"],
+            tel: value["telephoneNo"],
+            zip_code: value["postalCode"],
+            prefecture: value["address1"],
+            address1: value["address2"],
+            fax: value["faxNo"],
+            access: value["access"],
+            parking_info: value["parkingInformation"],
+            near_station: value["nearestStation"],
+            hotel_img_url: value["hotelImageUrl"],
+            rakuten_review_count: value["reviewCount"],
+            rakuten_review_avg: value["reviewAverage"].to_f
           }
         end
       end

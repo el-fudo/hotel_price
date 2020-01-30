@@ -7,9 +7,9 @@ module HotelPrice::Rakuten
       comment_area = driver.find_elements(:class_name, "commentBox")
       data = comment_area.map do |f|
         {
-            date: f.find_element(class_name: "time").text,
-            rakuten_hotel_id: rakuten_hotel_id,
-            comment: f.find_element(class_name: "commentSentence").text
+          date: f.find_element(class_name: "time").text,
+          rakuten_hotel_id: rakuten_hotel_id,
+          comment: f.find_element(class_name: "commentSentence").text
         }
       end
       driver.quit
