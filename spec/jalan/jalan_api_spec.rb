@@ -1,7 +1,7 @@
 RSpec.describe HotelPrice::Jalan::JalanAPI, type: :class do
   describe "Jalan API" do
     before(:each) do
-      api_key = "sco16771cc4c29"
+      api_key = ENV["JALAN_KEY"]
       @a1 = HotelPrice::Jalan::JalanAPI.new api_key
     end
     it "should get api_key" do

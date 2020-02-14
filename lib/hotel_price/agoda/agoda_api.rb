@@ -1,7 +1,9 @@
-module HotelPrice::AgodaAPI
-  class Agoda
+module HotelPrice::Agoda
+  class AgodaAPI
+    def initialize api_key
+      @api_key = api_key
+    end
     def test
-      @api = ENV["AGODA_KEY"]
       endpoint_url = "http://affiliateapi7643.agoda.com/affiliateservice/lt_v1"
       # 検索条件の指定
       # cityId, checkInDate, checkOutDate は必須、ソレ以外はオプション。
@@ -33,7 +35,7 @@ module HotelPrice::AgodaAPI
 
       url = URI.parse(endpoint_url)
       req = Net::HTTP::Post.new(url.path)
-      req["Authorization"] = @api
+      req["Authorization"] = @api_key
       req["Content-Type"]  = "application/json"
       req.body = params.to_json
       res = Net::HTTP.new(url.host, url.port).start do |http|
