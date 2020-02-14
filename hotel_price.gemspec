@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.name          = "hotel_price"
   spec.version       = HotelPrice::VERSION
   spec.authors       = ["Fumitake Kawasaki", "James Neve"]
-  spec.email         = ["fumitake.kawasaki@el-soul.com"]
+  spec.email         = ["fumitake.kawasaki@el-soul.com", "jamesoneve@gmail.com"]
 
   spec.summary       = %q{Scraping Library to get world hotel price}
   spec.description   = %q{Empower World Travel Information Technology }
