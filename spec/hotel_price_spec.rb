@@ -47,10 +47,10 @@ RSpec.describe HotelPrice do
     end
 
   
-    it "should set Jalan hotel ID" do
-      p @a1.test
-      expect(@a1.instance_variable_get(:@config)[:jalan_hotel_id]).to eq "128552"
-    end
+    # it "should set Jalan hotel ID" do
+    #   p @a1.test
+    #   expect(@a1.instance_variable_get(:@config)[:jalan_hotel_id]).to eq "128552"
+    # end
   
   end
 end
