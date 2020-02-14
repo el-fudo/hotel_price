@@ -220,3 +220,6 @@ Naming/AccessorMethodName:
 
 Style/MutableConstant:
   Enabled: false
+
+Lint/NonDeterministicRequireOrder:
+  Enabled: false

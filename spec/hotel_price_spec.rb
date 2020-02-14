@@ -43,7 +43,7 @@ RSpec.describe HotelPrice do
   describe "Jalan Class" do
     before(:each) do
       api_key = "sco16771cc4c29"
-      @a1 = HotelPrice::Jalan::JalanAPI.new api_key
+      @b1 = HotelPrice::Jalan::JalanAPI.new api_key
     end
 
   
