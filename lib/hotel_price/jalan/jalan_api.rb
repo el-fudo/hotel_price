@@ -15,21 +15,12 @@ module HotelPrice::Jalan
       if doc.css("NumberOfResults").text == "0"
         {
           date: DateTime.now.strftime("%Y-%m-%d"),
-          branch_id: request_body[:branch_id],
-          stay_date: request_body[:checkindate],
-          adult_num: request_body[:adult_num],
-          jalan_hotel_id: request_body[:jalan_hotel_id],
           plan_num: 0,
           min_price: 0
         }
       else
         {
           date: DateTime.now.strftime("%Y-%m-%d"),
-          branch_id: request_body[:branch_id],
-          channel: "jalan",
-          stay_date: request_body[:checkindate],
-          adult_num: request_body[:adult_num],
-          jalan_hotel_id: request_body[:jalan_hotel_id],
           hotel_name: doc.css("Plan").css("Hotel HotelName").text,
           room_name: doc.css("Plan").css("RoomName").text,
           plan_name: doc.css("Plan").css("PlanName").text,
