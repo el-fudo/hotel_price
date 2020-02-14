@@ -24,33 +24,4 @@ RSpec.describe HotelPrice do
     end
   end
 
-
-  describe "Rakuten Travel Console" do
-    before(:each) do
-      @a1 = HotelPrice::Rakuten::RakutenConsole.new(
-        login_id: "login-id",
-        login_pw: "login-pw",
-        rakuten_hotel_id: "128552",
-        chain: false,
-      )
-    end
-
-    it "should set Rakuten hotel ID" do
-      expect(@a1.instance_variable_get(:@config)[:rakuten_hotel_id]).to eq "128552"
-    end
-  end
-
-  describe "Jalan Class" do
-    before(:each) do
-      api_key = "sco16771cc4c29"
-      @b1 = HotelPrice::Jalan::JalanAPI.new api_key
-    end
-
-  
-    # it "should set Jalan hotel ID" do
-    #   p @a1.test
-    #   expect(@a1.instance_variable_get(:@config)[:jalan_hotel_id]).to eq "128552"
-    # end
-  
-  end
 end
