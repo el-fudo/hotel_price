@@ -27,8 +27,8 @@ module HotelPrice::Agoda
             "sortBy": "PriceAsc"
           },
           "discountOnly": true,
-          "checkInDate": "2019-10-02",
-          "checkOutDate": "2019-10-03",
+          "checkInDate": "2020-10-02",
+          "checkOutDate": "2020-10-03",
           "cityId": 5235
         }
       }
