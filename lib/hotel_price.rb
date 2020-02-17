@@ -2,6 +2,7 @@ require "hotel_price/version"
 require "hotel_price/rakuten"
 require "hotel_price/jalan"
 require "hotel_price/agoda"
+require "hotel_price/booking"
 require "selenium-webdriver"
 require "net/http"
 
