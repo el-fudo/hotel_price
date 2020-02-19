@@ -9,6 +9,7 @@ module HotelPrice::Booking
       url = "https://www.booking.com/hotel/jp/#{booking_hotel_id}.ja.html?#{query_string}"
       driver = self.get_selenium_driver
       driver.get(url)
+      puts url
       sleep 2
 
       data = driver.find_elements(:class_name, "hprt-table")
