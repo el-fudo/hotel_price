@@ -22,7 +22,7 @@ RSpec.describe HotelPrice::Rakuten::RakutenAPI, type: :class do
         breakfast: "",
         adult_num: 1
       }
-      result = @a1.get_rakuten_min_price(params)
+      result = @a1.get_min_price(params)
       expect(result[:checkin_date]).to eq params[:checkin_date]
     end
   end

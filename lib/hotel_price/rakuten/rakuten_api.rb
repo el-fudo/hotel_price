@@ -7,8 +7,7 @@ module HotelPrice::Rakuten
       }
     end
 
-    def get_rakuten_min_price params
-      p "hey"
+    def get_min_price params
       params[:breakfast] ||= ""
       try = 0
       begin
