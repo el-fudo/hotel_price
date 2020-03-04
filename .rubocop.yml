@@ -92,9 +92,8 @@ Style/GuardClause:
 
 # rake タスクの順序の hash は rocket を許可する
 Style/HashSyntax:
-  Exclude:
-    - "**/*.rake"
-    - "Rakefile"
+  EnforcedStyle: ruby19
+
 
 # 条件式の方を意識させたい場合には後置の if/unless を使わない方が分かりやすい
 Style/IfUnlessModifier:

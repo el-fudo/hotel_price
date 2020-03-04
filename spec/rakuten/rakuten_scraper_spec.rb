@@ -1,3 +1,3 @@
 RSpec.describe HotelPrice::Rakuten::RakutenScraper, type: :class do
-  it "return min price"
+  it "should get Monthly Karute Reservation Sales"
 end
