@@ -9,7 +9,6 @@ module HotelPrice::Booking
       url = "https://www.booking.com/hotel/jp/#{booking_hotel_id}.ja.html?#{query_string}"
       driver = self.get_selenium_driver
       driver.get(url)
-      puts url
       sleep 2
 
       data = driver.find_elements(:class_name, "hprt-table")
@@ -18,7 +17,10 @@ module HotelPrice::Booking
       return { date: date, min_price: 0 } if price_box.empty?
       price = price_box.first.text.delete("^0-9").to_i
 
-      { date: date, price: price }
+      hotel_name = driver.find_elements(:class_name, "hp__hotel-type-badge").first.text
+      room_name = driver.find_elements(:class_name, "hprt-ws-roomtype-link").first.text
+
+      { date: date, min_price: price, hotel_name: hotel_name, room_name: room_name }
     end
 
     def self.make_query_string(checkin_date, num_adults)
