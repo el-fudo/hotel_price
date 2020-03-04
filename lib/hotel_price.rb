@@ -3,6 +3,7 @@ require "hotel_price/rakuten"
 require "hotel_price/jalan"
 require "hotel_price/agoda"
 require "hotel_price/booking"
+require "hotel_price/expedia"
 require "selenium-webdriver"
 require "net/http"
 
