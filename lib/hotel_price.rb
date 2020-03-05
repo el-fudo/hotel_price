@@ -5,6 +5,7 @@ require "hotel_price/agoda"
 require "hotel_price/booking"
 require "selenium-webdriver"
 require "net/http"
+require "active_support/all"
 
 module HotelPrice
   class Error < StandardError; end
