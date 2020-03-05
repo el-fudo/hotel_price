@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    hotel_price (0.3.1)
+    hotel_price (0.3.2)
       nokogiri (~> 1.10.9)
       selenium-webdriver (~> 3.141)
 
@@ -27,8 +27,8 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.0)
-    rubyzip (2.0.0)
-    selenium-webdriver (3.142.6)
+    rubyzip (2.2.0)
+    selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
 
