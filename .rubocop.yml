@@ -222,3 +222,6 @@ Style/MutableConstant:
 
 Lint/NonDeterministicRequireOrder:
   Enabled: false
+
+Style/RescueModifier:
+  Enabled: false
