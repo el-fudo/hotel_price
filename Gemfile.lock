@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    hotel_price (0.3.2)
+    hotel_price (0.3.4)
       activesupport (~> 6.0.2.1)
       nokogiri (~> 1.10.9)
       selenium-webdriver (~> 3.141)
