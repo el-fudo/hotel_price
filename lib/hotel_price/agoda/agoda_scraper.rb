@@ -1,56 +1,48 @@
+require "date"
+
 module HotelPrice::Agoda
   class AgodaScraper
-    def self.get_price(day)
-      datetime = DateTime.now
-      retr_datetime = datetime + day
-      date = retr_datetime.day
-      date_tmrw = (retr_datetime + 1).day
-      url = "https://www.agoda.com/ja-jp/hotel-sunroute-new-sapporo/hotel/sapporo-jp.html"
+    def self.get_price(agoda_hotel_id, checkin_date, num_adults)
+      date = DateTime.now.strftime("%Y-%m-%d")
+
+      query_string = make_query_string(checkin_date, num_adults)
+      url = "https://www.agoda.com/ja-jp/#{agoda_hotel_id}.html?#{query_string}"
       driver = self.get_selenium_driver
       driver.get(url)
       sleep 2
 
-      added_months = (retr_datetime.year - datetime.year) * 12 + (retr_datetime.month - datetime.month)
+      data = driver.find_elements(:xpath, "//strong[@data-ppapi='room-price']")
+      return { date: date, min_price: 0 } if data.empty?
+      price = data.first.text.delete("^0-9").to_i
 
-      if added_months.positive?
-        (1..added_months).each do |_n|
-          driver.find_element(:class_name, "DayPicker-NavButton--next").click
-          sleep 1
-        end
-      end
+      hotel_name = driver.find_elements(:xpath, "//h1[@data-selenium='hotel-header-name']").first.text
+      room_name = driver.find_elements(:xpath, "//span[@data-selenium='masterroom-title-name']").first.text
 
-      today = retr_datetime.strftime("%a %b %d %Y")
-      tomorrow = (retr_datetime + 1).strftime("%a %b %d %Y")
+      { date: date, min_price: price, hotel_name: hotel_name, room_name: room_name }
+    end
 
-      driver.find_elements(:xpath, "//div[@aria-label=\"#{today}\"]")[0].click
-      driver.find_elements(:xpath, "//div[@aria-label=\"#{tomorrow}\"]")[0].click
-      driver.find_element(:xpath, "/html/body/div[14]/div/div[1]/div/div/div[5]/div/div/div/div/div/div[1]/div[1]").click
-      driver.find_element(:class_name, "Searchbox__searchButton__text").click
-      sleep 5
-      begin
-        room_name = driver.find_element(:xpath, "/html/body/div[14]/div/div[4]/div/div[2]/div/div[4]/div/div[2]/div[3]/div[1]/div[1]/div[1]/a/div/div/span").text
-      rescue StandardError => e
-        room_name = ""
-      end
-      begin
-        min_price = driver.find_element(:class_name, "PriceRibbon__Price").text.gsub(",", "").to_i
-      rescue StandardError
-        min_price = 0
-      end
-      sleep 3
-      data = {
-        checkin_date: datetime.year.to_s + datetime.month.to_s + date.to_i.to_s,
-        agoda_min_price: min_price,
-        agoda_min_room_name: room_name
-      }
-      puts data
-      driver.quit
+    def self.make_query_string(checkin_date, num_adults)
+      cd_args = make_date_args checkin_date
+      na_args = make_num_adults_arg num_adults
+      "#{cd_args}&#{na_args}&rooms=1&travellerType=-1"
+    end
+
+    def self.make_date_args checkin_date
+      Date.parse checkin_date rescue return ""
+      t = Date.parse(checkin_date)
+      checkin_arg = t.strftime("checkIn=%Y-%m-%d")
+      "#{checkin_arg}&los=2"
+    end
+
+    def self.make_num_adults_arg num_adults
+      return "" if num_adults.to_i <= 1
+      "adults=#{num_adults}"
     end
 
     def self.get_selenium_driver
       options = Selenium::WebDriver::Firefox::Options.new
       options.add_argument("-headless")
-      Selenium::WebDriver.for :firefox#, options: options
+      Selenium::WebDriver.for :firefox, options: options
     end
   end
 end
