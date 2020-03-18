@@ -16,7 +16,7 @@ module HotelPrice::Rakuten
           gender = f.find_element(class_name: "user").text.match(/\/../).to_s.gsub("/", "")
         end
         {
-          date: f.find_element(class_name: "time").text,
+          date: f.find_element(class_name: "time").text.gsub("年","").gsub("月", "").gsub("日", ""),
           rate: f.find_element(class_name: "rate").text,
           username: username,
           generation: generation,
