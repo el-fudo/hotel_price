@@ -6,8 +6,21 @@ module HotelPrice::Rakuten
       sleep 2
       comment_area = driver.find_elements(:class_name, "commentBox")
       data = comment_area.map do |f|
+        if f.find_element(class_name: "user").text.include?("投稿者さん")
+          username = f.find_element(class_name: "user").text
+          generation = 0
+          gender = ""
+        else
+          username = f.find_element(class_name: "user").text.match(/(^.+ )/).to_s.strip 
+          generation = f.find_element(class_name: "user").text.match(/\[.+代/).to_s.gsub("[","").gsub("代", "")
+          gender = f.find_element(class_name: "user").text.match(/\/../).to_s.gsub("/", "")
+        end
         {
           date: f.find_element(class_name: "time").text,
+          rate: f.find_element(class_name: "rate").text,
+          username: username,
+          generation: generation,
+          gender: gender,
           rakuten_hotel_id: rakuten_hotel_id,
           comment: f.find_element(class_name: "commentSentence").text
         }
