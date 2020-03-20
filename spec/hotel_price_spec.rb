@@ -24,4 +24,14 @@ RSpec.describe HotelPrice do
     end
   end
 
+  describe "Configuration" do
+    it "Should be able to set configuration" do
+      HotelPrice.configure do |config|
+        config.agoda_api_key = "abc123"
+      end
+
+      expect(HotelPrice.configuration.agoda_api_key).to eq "abc123"
+    end
+  end
+
 end

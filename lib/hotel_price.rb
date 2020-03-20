@@ -4,12 +4,22 @@ require "hotel_price/jalan"
 require "hotel_price/agoda"
 require "hotel_price/booking"
 require "hotel_price/expedia"
+require "hotel_price/configuration"
 require "selenium-webdriver"
 require "net/http"
 require "active_support/all"
 
 module HotelPrice
   class Error < StandardError; end
+  class << self
+    attr_accessor :configuration
+  end
+
+  def self.configure
+    self.configuration ||= Configuration.new
+    yield(configuration)
+  end
+
   def self.rakuten_travel
     driver = self.get_selenium_driver
     rakuten_travel_hotel_id = 128552
@@ -35,5 +45,15 @@ module HotelPrice
     options = Selenium::WebDriver::Firefox::Options.new
     options.add_argument("-headless")
     Selenium::WebDriver.for :firefox, options: options
+  end
+
+  class Configuration
+    # Agoda API key
+    # @param [String]
+    attr_accessor :agoda_api_key
+
+    def initialize
+      @agoda_api_key = nil
+    end
   end
 end
