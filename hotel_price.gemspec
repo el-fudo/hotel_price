@@ -34,4 +34,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "activesupport", "~> 6.0.2.1"
   spec.add_runtime_dependency "nokogiri", "~> 1.10.9"
   spec.add_runtime_dependency "selenium-webdriver", "~> 3.141"
+  spec.add_runtime_dependency "json", "~> 2.3.0"
 end
