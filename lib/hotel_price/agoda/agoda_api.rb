@@ -13,6 +13,7 @@ module HotelPrice::Agoda
       # 検索条件の指定
       # cityId, checkInDate, checkOutDate は必須、ソレ以外はオプション。
       #
+      checkin_date = checkin_date.to_s
       Date.parse checkin_date rescue return ""
       t = Date.parse(checkin_date)
       checkin_arg = t.strftime("%Y-%m-%d")
