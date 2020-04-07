@@ -10,7 +10,7 @@ module HotelPrice::Rakuten
       options = Selenium::WebDriver::Firefox::Options.new
       options.add_argument("-headless")
       @wait = Selenium::WebDriver::Wait.new(:timeout => 100)
-      @driver = Selenium::WebDriver.for :firefox, options: options
+      @driver = Selenium::WebDriver.for :firefox#, options: options
       if @config[:chain]
         go_to_management_page_chain
       else

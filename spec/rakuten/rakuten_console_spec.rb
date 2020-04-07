@@ -4,8 +4,8 @@ RSpec.describe HotelPrice::Rakuten::RakutenConsole, type: :class do
       @a1 = HotelPrice::Rakuten::RakutenConsole.new(
         login_id: ENV["RT_LOGIN"],
         login_pw: ENV["RT_PW"],
-        rakuten_hotel_id: "128552",
-        chain: false,
+        rakuten_hotel_id: "68565",
+        chain: true
       )
     end
 
