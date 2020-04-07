@@ -15,10 +15,10 @@ module HotelPrice::Rakuten
       if result["error"] == "not_found"
         {
           date: DateTime.now.strftime("%Y-%m-%d"),
-          checkin_date: params[:checkin_date],
-          rakuten_hotel_id: params[:rakuten_hotel_id],
-          adult_num: params[:adult_num],
-          breakfast: params[:breakfast],
+          checkin_date: checkin_date,
+          rakuten_hotel_id: @config[:rakuten_hotel_id],
+          adult_num: num_adults,
+          breakfast: "",
           plan_num: 0,
           min_price: 0
         }
@@ -27,11 +27,11 @@ module HotelPrice::Rakuten
       else
         {
           date: DateTime.now.strftime("%Y-%m-%d"),
-          checkin_date: result["hotels"][0]["hotel"][1]["roomInfo"][1]["dailyCharge"]["stayDate"],
-          rakuten_hotel_id: params[:rakuten_hotel_id],
+          checkin_date: checkin_date,
+          rakuten_hotel_id: rakuten_hotel_id,
           hotel_name: result["hotels"][0]["hotel"][0]["hotelBasicInfo"]["hotelName"],
-          adult_num: params[:adult_num],
-          breakfast: params[:breakfast],
+          adult_num: num_adults,
+          breakfast: "",
           plan_num: result["pagingInfo"]["recordCount"],
           room_name: result["hotels"][0]["hotel"][1]["roomInfo"][0]["roomBasicInfo"]["roomName"],
           plan_name: result["hotels"][0]["hotel"][1]["roomInfo"][0]["roomBasicInfo"]["planName"],
@@ -41,8 +41,8 @@ module HotelPrice::Rakuten
     end
 
     def make_query_string(rakuten_hotel_id, checkin_date, num_adults)
-      checkout_date = (Date.parse(checkin_date) + 2).strftime("%Y-%m-%d")
-      "format=json&sort=%2BroomCharge&searchPattern=1&applicationId=#{@config[:rakuten_api_key]}&adultNum=#{num_adults}&checkinDate=#{checkin_date}&checkoutDate=#{checkout_date}&squeezeCondition="
+      checkout_date = (Date.parse(checkin_date) + 1).strftime("%Y-%m-%d")
+      "format=json&sort=%2BroomCharge&searchPattern=1&applicationId=#{@config[:rakuten_api_key]}&hotelNo=#{rakuten_hotel_id}&adultNum=#{num_adults}&checkinDate=#{checkin_date}&checkoutDate=#{checkout_date}&squeezeCondition="
     end
 
     def get_min_price params
@@ -103,7 +103,7 @@ module HotelPrice::Rakuten
       return result["error_description"] if result["error"] == "wrong_parameter"
       result["hotels"][0].each do |_key, field|
         field[0].each do |_, value|
-          data_hash = {
+          @data_hash = {
             rakuten_hotel_id: value["hotelNo"],
             hotel_name: value["hotelName"],
             room_price_min: value["hotelMinCharge"],
@@ -125,42 +125,67 @@ module HotelPrice::Rakuten
       end
       result["hotels"][0].each do |_key, field|
         field[1].each do |_, value|
-          data_hash["rakuten_service_review"] = value["serviceAverage"].to_f
-          data_hash["rakuten_location_review"] = value["locationAverage"].to_f
-          data_hash["rakuten_room_review"] = value["roomAverage"].to_f
-          data_hash["rakuten_equipment_review"] = value["equipmentAverage"].to_f
-          data_hash["rakuten_bath_review"] = value["bathAverage"].to_f
-          data_hash["rakuten_meal_review"] = value["mealAverage"].to_f
+          @data_hash["rakuten_service_review"] = value["serviceAverage"].to_f
+          @data_hash["rakuten_location_review"] = value["locationAverage"].to_f
+          @data_hash["rakuten_room_review"] = value["roomAverage"].to_f
+          @data_hash["rakuten_equipment_review"] = value["equipmentAverage"].to_f
+          @data_hash["rakuten_bath_review"] = value["bathAverage"].to_f
+          @data_hash["rakuten_meal_review"] = value["mealAverage"].to_f
         end
       end
       result["hotels"][0].each do |_key, field|
         field[2].each do |_, value|
-          data_hash["middle_class_code"] = value["middleClassCode"].to_s
-          data_hash["small_class_code"] = value["smallClassCode"].to_s
-          data_hash["area_name"] = value["areaName"].to_s
-          data_hash["hotel_class_code"] = value["hotelClassCode"].to_s
-          data_hash["checkin_time"] = value["checkinTime"].to_s
-          data_hash["checkout_time"] = value["checkoutTime"].to_s
-          data_hash["last_checkin_time"] = value["lastCheckinTime"].to_s
+          @data_hash["middle_class_code"] = value["middleClassCode"].to_s
+          @data_hash["small_class_code"] = value["smallClassCode"].to_s
+          @data_hash["area_name"] = value["areaName"].to_s
+          @data_hash["hotel_class_code"] = value["hotelClassCode"].to_s
+          @data_hash["checkin_time"] = value["checkinTime"].to_s
+          @data_hash["checkout_time"] = value["checkoutTime"].to_s
+          @data_hash["last_checkin_time"] = value["lastCheckinTime"].to_s
         end
       end
       result["hotels"][0].each do |_key, field|
         field[3].each do |_, value|
-          data_hash["total_room_num"] = value["hotelRoomNum"].to_s
+          @data_hash["total_room_num"] = value["hotelRoomNum"].to_s
           room_facilities = []
           value["roomFacilities"].each_with_index do |f, i|
             room_facilities[i] = f["item"]
           end
-          data_hash["room_facilities"] = room_facilities
+          @data_hash["room_facilities"] = room_facilities
         end
       end
       result["hotels"][0].each do |_key, field|
         field[4].each do |_, value|
-          data_hash["hotel_policy_note"] = value["note"].to_s
-          data_hash["cancel_policy"] = value["cancelPolicy"].to_s
+          @data_hash["hotel_policy_note"] = value["note"].to_s
+          @data_hash["cancel_policy"] = value["cancelPolicy"].to_s
         end
       end
-      data_hash
+      @data_hash
+    end
+
+    def search_ranking(params = {})
+      body = {
+        middle_class_code: params[:middle_class_code],
+        small_class_code: params[:small_class_code],
+        detail_class_code: params[:detail_class_code],
+        page_num: params[:page_num]
+      }
+      url = "https://app.rakuten.co.jp/services/api/Travel/SimpleHotelSearch/20170426?applicationId=#{@config[:rakuten_api_key]}&largeClassCode=japan&middleClassCode=#{body[:middle_class_code]}&smallClassCode=#{body[:small_class_code]}&detailClassCode=#{body[:detail_class_code]}&page=#{body[:page_num]}"
+      uri = URI.parse(url)
+      json = Net::HTTP.get(uri)
+      result = JSON.parse(json)
+      @i = 1
+      result["hotels"].each do |key, _value|
+        if @config[:rakuten_hotel_id] == key["hotel"][0]["hotelBasicInfo"]["hotelNo"].to_s
+          return {
+            area_rank: @i.to_i + ((body[:page_num].to_i - 1) * 30),
+            hotel_name: key["hotel"][0]["hotelBasicInfo"]["hotelName"],
+            status: "found"
+          }
+        end
+        @i += 1
+      end
+      { status: "no" }
     end
   end
 end
