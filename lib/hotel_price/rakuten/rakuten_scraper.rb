@@ -49,6 +49,18 @@ module HotelPrice::Rakuten
       plan_num.size
     end
 
+    def self.get_dayuse_plan_num rakuten_hotel_id
+      driver = self.get_selenium_driver
+      driver.get "https://hotel.travel.rakuten.co.jp/hotelinfo/plan/#{rakuten_hotel_id}"
+      sleep 10
+      driver.find_element(:id, "du-radio").click
+      driver.find_element(:id, "dh-submit").click
+      sleep 10
+      plan_num = driver.find_elements(:class, "planThumb")
+      driver.quit
+      plan_num.size
+    end
+
     def self.get_selenium_driver
       # firefox_capabilities = Selenium::WebDriver::Remote::Capabilities.firefox
       # @driver = Selenium::WebDriver.for(:remote, url: "http://hub:4444/wd/hub", desired_capabilities: firefox_capabilities)
