@@ -225,3 +225,6 @@ Lint/NonDeterministicRequireOrder:
 
 Style/RescueModifier:
   Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
