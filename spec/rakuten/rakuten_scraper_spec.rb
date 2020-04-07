@@ -9,5 +9,11 @@ RSpec.describe HotelPrice::Rakuten::RakutenScraper, type: :class do
       a1 = HotelPrice::Rakuten::RakutenScraper.get_photo_num 147780
       expect(a1).to be_an(Integer)
     end
+
+    it "should return breakfast plans number" do
+      a1 = HotelPrice::Rakuten::RakutenScraper.get_bf_plan_num 147780
+      p a1
+      expect(a1).to be_an(Integer)
+    end
   end
 end

@@ -33,7 +33,20 @@ module HotelPrice::Rakuten
       driver = self.get_selenium_driver
       driver.get "https://hotel.travel.rakuten.co.jp/hinfo/#{rakuten_hotel_id}/"
       sleep 2
-      driver.find_element(:id, "navPht").text.gsub("写真・動画(", "").gsub(")", "").to_i
+      num = driver.find_element(:id, "navPht").text.gsub("写真・動画(", "").gsub(")", "").to_i
+      driver.quit
+      num
+    end
+
+    def self.get_bf_plan_num rakuten_hotel_id
+      driver = self.get_selenium_driver
+      driver.get "https://hotel.travel.rakuten.co.jp/hotelinfo/plan/#{rakuten_hotel_id}"
+      driver.find_element(:id, "focus1").click
+      driver.find_element(:id, "dh-squeezes-submit").click
+      sleep 30
+      plan_num = driver.find_elements(:class, "planThumb")
+      driver.quit
+      plan_num.size
     end
 
     def self.get_selenium_driver
