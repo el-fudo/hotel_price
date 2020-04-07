@@ -4,5 +4,10 @@ RSpec.describe HotelPrice::Rakuten::RakutenScraper, type: :class do
       a1 = HotelPrice::Rakuten::RakutenScraper.review 147780
       expect(a1[0][:comment]).not_to eq nil
     end
+
+    it "should return photos number" do
+      a1 = HotelPrice::Rakuten::RakutenScraper.get_photo_num 147780
+      expect(a1).to be_an(Integer)
+    end
   end
 end

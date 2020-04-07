@@ -9,7 +9,8 @@ module HotelPrice::Rakuten
       }
       options = Selenium::WebDriver::Firefox::Options.new
       options.add_argument("-headless")
-      @driver = Selenium::WebDriver.for :firefox, options: options
+      @wait = Selenium::WebDriver::Wait.new(:timeout => 100)
+      @driver = Selenium::WebDriver.for :firefox#, options: options
       if @config[:chain]
         go_to_management_page_chain
       else
@@ -341,20 +342,6 @@ module HotelPrice::Rakuten
         cells = f.find_elements(:css, "td").map(&:text)
         return cells[1]
       end
-    end
-
-    def get_photo_num
-      options = Selenium::WebDriver::Firefox::Options.new
-      options.add_argument("-headless")
-      @driver = Selenium::WebDriver.for :firefox, options: options
-      @driver.get "https://hotel.travel.rakuten.co.jp/hinfo/#{@hotel.rakuten_hotel_id}/"
-      sleep 2
-      begin
-        @rows = @driver.find_element(:xpath, "/html/body/div[5]/div[1]/div[4]/div[1]/div[1]/ul/li[3]/a")
-      rescue StandardError => e
-        @rows = @driver.find_element(:xpath, "/html/body/div[4]/div/div[4]/div[1]/div[1]/ul/li[3]/a")
-      end
-      @rows.text.gsub("写真・動画(", "").gsub(")", "")
     end
 
     def degit2 num

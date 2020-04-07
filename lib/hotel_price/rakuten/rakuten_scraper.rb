@@ -29,13 +29,20 @@ module HotelPrice::Rakuten
       data
     end
 
+    def self.get_photo_num rakuten_hotel_id
+      driver = self.get_selenium_driver
+      driver.get "https://hotel.travel.rakuten.co.jp/hinfo/#{rakuten_hotel_id}/"
+      sleep 2
+      driver.find_element(:id, "navPht").text.gsub("写真・動画(", "").gsub(")", "").to_i
+    end
+
     def self.get_selenium_driver
       # firefox_capabilities = Selenium::WebDriver::Remote::Capabilities.firefox
       # @driver = Selenium::WebDriver.for(:remote, url: "http://hub:4444/wd/hub", desired_capabilities: firefox_capabilities)
   
       options = Selenium::WebDriver::Firefox::Options.new
       options.add_argument("-headless")
-      Selenium::WebDriver.for :firefox, options: options
+      Selenium::WebDriver.for :firefox#, options: options
     end
     
   end
