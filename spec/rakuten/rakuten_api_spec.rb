@@ -17,12 +17,10 @@ RSpec.describe HotelPrice::Rakuten::RakutenAPI, type: :class do
 
     it "should get min price" do
       ## Change date or rakuten_hotel_id if there is no data.
-      params = {
-        checkin_date: (DateTime.now + 45).strftime("%Y-%m-%d"),
-        breakfast: "",
-        adult_num: 1
-      }
-      result = @a1.get_min_price(params)
+      rakuten_hotel_id = "147780"
+      checkin_date = (DateTime.now + 45).strftime("%Y-%m-%d")
+      num_adults = 1
+      result = @a1.get_price(rakuten_hotel_id, checkin_date, num_adults)
       expect(result[:checkin_date]).to eq params[:checkin_date]
     end
   end
