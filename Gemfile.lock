@@ -3,7 +3,7 @@ PATH
   specs:
     hotel_price (0.3.6)
       activesupport (~> 6.0.2.1)
-      json
+      json (~> 2.3.0)
       nokogiri (~> 1.10.9)
       selenium-webdriver (~> 3.141)
 
