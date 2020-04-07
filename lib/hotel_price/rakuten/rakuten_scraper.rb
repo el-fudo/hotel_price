@@ -61,13 +61,27 @@ module HotelPrice::Rakuten
       plan_num.size
     end
 
+    def self.get_detail_class_code rakuten_hotel_id
+      driver = self.get_selenium_driver
+      driver.get "https://hotel.travel.rakuten.co.jp/hinfo/?f_no=#{rakuten_hotel_id}"
+      {
+        status: "found",
+        detail_class_code: driver.find_element(id: "breadcrumbs-detail").attribute("href").match(/\/.\./).to_s.gsub("/", "").gsub(".", "")
+      }
+    rescue
+      {
+        status: "not_found",
+        detail_class_code: ""
+      }
+    end
+
     def self.get_selenium_driver
       # firefox_capabilities = Selenium::WebDriver::Remote::Capabilities.firefox
       # @driver = Selenium::WebDriver.for(:remote, url: "http://hub:4444/wd/hub", desired_capabilities: firefox_capabilities)
-  
+
       options = Selenium::WebDriver::Firefox::Options.new
       options.add_argument("-headless")
-      Selenium::WebDriver.for :firefox#, options: options
+      Selenium::WebDriver.for :firefox, options: options
     end
     
   end

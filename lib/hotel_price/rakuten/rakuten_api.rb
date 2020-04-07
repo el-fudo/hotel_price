@@ -99,6 +99,7 @@ module HotelPrice::Rakuten
       uri = URI.parse("https://app.rakuten.co.jp/services/api/Travel/HotelDetailSearch/20131024?hotelNo=" + @config[:rakuten_hotel_id].to_s + "&applicationId=" + @config[:rakuten_api_key].to_s + "&datumType=1&responseType=large")
       json = Net::HTTP.get(uri)
       result = JSON.parse(json)
+      puts uri
       return "ホテル情報がありませんでした。" if result["error"] == "not_found"
       return result["error_description"] if result["error"] == "wrong_parameter"
       result["hotels"][0].each do |_key, field|
@@ -174,18 +175,32 @@ module HotelPrice::Rakuten
       uri = URI.parse(url)
       json = Net::HTTP.get(uri)
       result = JSON.parse(json)
-      @i = 1
+      i = 1
       result["hotels"].each do |key, _value|
         if @config[:rakuten_hotel_id] == key["hotel"][0]["hotelBasicInfo"]["hotelNo"].to_s
           return {
-            area_rank: @i.to_i + ((body[:page_num].to_i - 1) * 30),
+            area_rank: i.to_i + ((body[:page_num].to_i - 1) * 30),
             hotel_name: key["hotel"][0]["hotelBasicInfo"]["hotelName"],
             status: "found"
           }
         end
-        @i += 1
+        i += 1
       end
-      { status: "no" }
+      { status: "not_found" }
+    end
+
+    def get_page_num(params = {})
+      body = {
+        middle_class_code: hotel.middle_class_code,
+        small_class_code: hotel.small_class_code,
+        detail_class_code: hotel.detail_class_code
+      }
+      url = "https://app.rakuten.co.jp/services/api/Travel/SimpleHotelSearch/20170426?applicationId=#{@config[:rakuten_api_key]}&largeClassCode=japan&middleClassCode=#{body[:middle_class_code]}&smallClassCode=#{body[:small_class_code]}&detailClassCode=#{body[:detail_class_code]}"
+      puts url
+      uri = URI.parse(url)
+      json = Net::HTTP.get(uri)
+      result = JSON.parse(json)
+      result["pagingInfo"]["pageCount"]
     end
   end
 end

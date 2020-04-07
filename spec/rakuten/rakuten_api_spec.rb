@@ -2,7 +2,7 @@ RSpec.describe HotelPrice::Rakuten::RakutenAPI, type: :class do
   describe "Rakuten API" do
     before(:each) do
       @a1 = HotelPrice::Rakuten::RakutenAPI.new(
-        rakuten_hotel_id: "147780",
+        rakuten_hotel_id: "19908",
         rakuten_api_key: ENV["RT_API_KEY"]
       )
     end
@@ -32,7 +32,7 @@ RSpec.describe HotelPrice::Rakuten::RakutenAPI, type: :class do
         page_num: 1
       }
       result = @a1.search_ranking(params)
-      expect(result[:status]).to eq("found") | eq("no")
+      expect(result[:status]).to eq("found") | eq("not_found")
     end
   end
 end

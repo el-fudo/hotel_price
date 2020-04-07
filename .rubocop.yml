@@ -224,3 +224,6 @@ Lint/NonDeterministicRequireOrder:
 
 Style/RescueModifier:
   Enabled: false
+
+Style/RegexpLiteral:
+  Enabled: false
