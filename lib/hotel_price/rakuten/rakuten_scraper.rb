@@ -1,7 +1,7 @@
 module HotelPrice::Rakuten
   class RakutenScraper
-    def self.review rakuten_hotel_id
-      driver = self.get_selenium_driver
+    def self.review rakuten_hotel_id, mode = 0
+      driver = self.get_selenium_driver mode
       driver.get("https://travel.rakuten.co.jp/HOTEL/#{rakuten_hotel_id.to_s}/review.html")
       sleep 2
       comment_area = driver.find_elements(:class_name, "commentBox")
@@ -29,8 +29,8 @@ module HotelPrice::Rakuten
       data
     end
 
-    def self.get_photo_num rakuten_hotel_id
-      driver = self.get_selenium_driver
+    def self.get_photo_num rakuten_hotel_id, mode = 0
+      driver = self.get_selenium_driver mode
       driver.get "https://hotel.travel.rakuten.co.jp/hinfo/#{rakuten_hotel_id}/"
       sleep 2
       num = driver.find_element(:id, "navPht").text.gsub("写真・動画(", "").gsub(")", "").to_i
@@ -38,8 +38,8 @@ module HotelPrice::Rakuten
       num
     end
 
-    def self.get_bf_plan_num rakuten_hotel_id
-      driver = self.get_selenium_driver
+    def self.get_bf_plan_num rakuten_hotel_id, mode = 0
+      driver = self.get_selenium_driver mode
       driver.get "https://hotel.travel.rakuten.co.jp/hotelinfo/plan/#{rakuten_hotel_id}"
       driver.find_element(:id, "focus1").click
       driver.find_element(:id, "dh-squeezes-submit").click
@@ -49,8 +49,8 @@ module HotelPrice::Rakuten
       plan_num.size
     end
 
-    def self.get_dayuse_plan_num rakuten_hotel_id
-      driver = self.get_selenium_driver
+    def self.get_dayuse_plan_num rakuten_hotel_id, mode = 0
+      driver = self.get_selenium_driver mode
       driver.get "https://hotel.travel.rakuten.co.jp/hotelinfo/plan/#{rakuten_hotel_id}"
       sleep 10
       driver.find_element(:id, "du-radio").click
@@ -61,8 +61,8 @@ module HotelPrice::Rakuten
       plan_num.size
     end
 
-    def self.get_detail_class_code rakuten_hotel_id
-      driver = self.get_selenium_driver
+    def self.get_detail_class_code rakuten_hotel_id, mode = 0
+      driver = self.get_selenium_driver mode
       driver.get "https://hotel.travel.rakuten.co.jp/hinfo/?f_no=#{rakuten_hotel_id}"
       {
         status: "found",
@@ -75,12 +75,17 @@ module HotelPrice::Rakuten
       }
     end
 
-    def self.get_selenium_driver
-      firefox_capabilities = Selenium::WebDriver::Remote::Capabilities.firefox
-      Selenium::WebDriver.for(:remote, url: "http://hub:4444/wd/hub", desired_capabilities: firefox_capabilities)
-      # options = Selenium::WebDriver::Firefox::Options.new
-      # options.add_argument("-headless")
-      # Selenium::WebDriver.for :firefox, options: options
+    def self.get_selenium_driver(mode = 0)
+      if mode.zero?
+        options = Selenium::WebDriver::Firefox::Options.new
+        options.add_argument("-headless")
+        Selenium::WebDriver.for :firefox, options: options
+      elsif mode == 1
+        firefox_capabilities = Selenium::WebDriver::Remote::Capabilities.firefox
+        Selenium::WebDriver.for(:remote, url: "http://hub:4444/wd/hub", desired_capabilities: firefox_capabilities)
+      else
+        Selenium::WebDriver.for :firefox
+      end
     end
     
   end
