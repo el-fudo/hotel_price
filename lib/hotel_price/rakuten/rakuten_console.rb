@@ -7,10 +7,14 @@ module HotelPrice::Rakuten
         chain: params[:chain] ||= false,
         rakuten_hotel_id: params[:rakuten_hotel_id] ||= 0
       }
-      options = Selenium::WebDriver::Firefox::Options.new
-      options.add_argument("-headless")
       @wait = Selenium::WebDriver::Wait.new(:timeout => 100)
-      @driver = Selenium::WebDriver.for :firefox, options: options
+      # For Local Headless
+      # options = Selenium::WebDriver::Firefox::Options.new
+      # options.add_argument("-headless")
+      # @driver = Selenium::WebDriver.for :firefox, options: options
+      
+      firefox_capabilities = Selenium::WebDriver::Remote::Capabilities.firefox
+      @driver = Selenium::WebDriver.for(:remote, url: "http://hub:4444/wd/hub", desired_capabilities: firefox_capabilities)
       if @config[:chain]
         go_to_management_page_chain
       else
