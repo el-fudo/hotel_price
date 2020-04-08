@@ -2,17 +2,17 @@ RSpec.describe HotelPrice::Rakuten::RakutenAPI, type: :class do
   describe "Rakuten API" do
     before(:each) do
       @a1 = HotelPrice::Rakuten::RakutenAPI.new(
-        rakuten_hotel_id: "19908",
+        rakuten_hotel_id: "172261",
         rakuten_api_key: ENV["RT_API_KEY"]
       )
     end
 
     it "should set Rakuten hotel ID" do
-      expect(@a1.instance_variable_get(:@config)[:rakuten_hotel_id]).to eq "147780"
+      expect(@a1.instance_variable_get(:@config)[:rakuten_hotel_id]).to eq "19908"
     end
 
     it "should get hotel info" do
-      expect(@a1.hotel_info[:rakuten_hotel_id]).to eq 147780
+      expect(@a1.hotel_info[:rakuten_hotel_id]).to eq 19908
     end
 
     it "should get min price" do
@@ -25,13 +25,18 @@ RSpec.describe HotelPrice::Rakuten::RakutenAPI, type: :class do
     end
 
     it "should get page ranking" do
-      params = {
-        middle_class_code: "nagasaki",
-        small_class_code: "nagasaki",
-        detail_class_code: "",
-        page_num: 1
-      }
-      result = @a1.search_ranking(params)
+      page_num = 1
+      result = @a1.search_ranking page_num
+      expect(result[:status]).to eq("found") | eq("not_found")
+    end
+
+    it "should get page num" do
+      result = @a1.get_page_num
+      expect(result[:page_num]).to be >= 0
+    end
+
+    it "should return area rank" do
+      result = @a1.get_area_rank
       expect(result[:status]).to eq("found") | eq("not_found")
     end
   end
