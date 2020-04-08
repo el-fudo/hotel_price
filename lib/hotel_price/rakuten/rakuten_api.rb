@@ -192,6 +192,7 @@ module HotelPrice::Rakuten
             status: "found",
             hotel_name: key["hotel"][0]["hotelBasicInfo"]["hotelName"],
             area_name: body[:area_name],
+            page_num: params[:page_num],
             area_rank: i.to_i + ((body[:page_num].to_i - 1) * 30),
             middle_class_code: body[:middle_class_code],
             small_class_code: body[:small_class_code],
