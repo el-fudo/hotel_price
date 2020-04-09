@@ -5,20 +5,28 @@ module HotelPrice::Rakuten
         login_id: params[:login_id],
         login_pw: params[:login_pw],
         chain: params[:chain] ||= false,
-        rakuten_hotel_id: params[:rakuten_hotel_id] ||= 0
+        rakuten_hotel_id: params[:rakuten_hotel_id] ||= 0,
+        mode: params[:mode] ||= 0
       }
-      @wait = Selenium::WebDriver::Wait.new(:timeout => 100)
-      # For Local Headless
-      # options = Selenium::WebDriver::Firefox::Options.new
-      # options.add_argument("-headless")
-      # @driver = Selenium::WebDriver.for :firefox, options: options
-      
-      firefox_capabilities = Selenium::WebDriver::Remote::Capabilities.firefox
-      @driver = Selenium::WebDriver.for(:remote, url: "http://hub:4444/wd/hub", desired_capabilities: firefox_capabilities)
+      @wait = Selenium::WebDriver::Wait.new(timeout: 100)
+      @driver = get_selenium_driver @config[:mode]
       if @config[:chain]
         go_to_management_page_chain
       else
         go_to_management_page_single
+      end
+    end
+
+    def get_selenium_driver(mode = 0)
+      if mode == 1
+        firefox_capabilities = Selenium::WebDriver::Remote::Capabilities.firefox
+        Selenium::WebDriver.for(:remote, url: "http://hub:4444/wd/hub", desired_capabilities: firefox_capabilities)
+      elsif mode == 2
+        Selenium::WebDriver.for :firefox
+      else
+        options = Selenium::WebDriver::Firefox::Options.new
+        options.add_argument("-headless")
+        Selenium::WebDriver.for :firefox, options: options
       end
     end
 
@@ -104,7 +112,7 @@ module HotelPrice::Rakuten
       (0..@plans.size - 1).each do |i|
         plan = RakutenPlan.find_by(manage_number: @data[i][:manage_number])
         @driver.find_element(:link_text, @data[i][:plan_name]).click
-        status = @driver.find_element(:xpath, "/html/body/form[4]/table[1]/tbody/tr/td/table/tbody[1]/tr[3]/td[2]").text
+        @driver.find_element(:xpath, "/html/body/form[4]/table[1]/tbody/tr/td/table/tbody[1]/tr[3]/td[2]").text
         flag = []
         flag[0] = "楽天トラベル[宿泊のみ]" if @driver.find_element(:name, "f_tabi_flg").selected?
 
@@ -288,7 +296,7 @@ module HotelPrice::Rakuten
           room_size_tatami = ""
         end
         (0..5).each do |i|
-          room_category = @driver.find_element(:id, "view2_type_#{i}").attribute("value") if @driver.find_element(:id, "view2_type_#{i}").selected?
+          @driver.find_element(:id, "view2_type_#{i}").attribute("value") if @driver.find_element(:id, "view2_type_#{i}").selected?
         end
 
         # Pause sort
@@ -331,7 +339,7 @@ module HotelPrice::Rakuten
         password_exp_date: exp,
         rakuten_hotel_id: rakuten_hotel_id
       }
-    rescue => e
+    rescue StandardError => e
       @driver.quit
       {
         status: "error",
@@ -340,7 +348,7 @@ module HotelPrice::Rakuten
     end
 
     def get_area_seo_rank
-      ranking_page = @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[1]/tbody/tr[2]/td/table/tbody/tr[1]/td[5]/table/tbody/tr/td/table[1]/tbody/tr[5]/td[2]/font/b")
+      @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[1]/tbody/tr[2]/td/table/tbody/tr[1]/td[5]/table/tbody/tr/td/table[1]/tbody/tr[5]/td[2]/font/b")
       rows = @driver.find_elements(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[1]/tbody/tr[2]/td/table/tbody/tr[1]/td[5]/table/tbody/tr/td/table[1]/tbody/tr[5]")
       rows.each do |f|
         cells = f.find_elements(:css, "td").map(&:text)
@@ -355,7 +363,7 @@ module HotelPrice::Rakuten
 
     def get_reservation_info
       t = Time.now
-      management_page = @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[3]/tbody/tr[2]/td[2]/table/tbody/tr[3]/td/input").click
+      @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[3]/tbody/tr[2]/td[2]/table/tbody/tr[3]/td/input").click
       if t.day == 1
         last_month = degit2 t.prev_month.month.to_i
         yesterday = degit2 t.prev_month.end_of_month.day.to_i
@@ -472,8 +480,8 @@ module HotelPrice::Rakuten
     end
 
     def daily_data_update
-      green_tab = @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[2]/tbody/tr[1]/td[1]/table/tbody/tr/td[3]/a/img").click
-      karute_button = @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[5]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/table/tbody/tr/td[1]/input").click
+      @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[2]/tbody/tr[1]/td[1]/table/tbody/tr/td[3]/a/img").click
+      @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[5]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/table/tbody/tr/td[1]/input").click
       sleep 3
       if Time.now.day == 1
       else
@@ -485,7 +493,7 @@ module HotelPrice::Rakuten
         select = Selenium::WebDriver::Support::Select.new(@driver.find_element(:name, "f_date"))
         select.select_by(:value, value)
       end
-      display_data = @driver.find_element(:xpath, '//input[@value = "表示"]').click
+      @driver.find_element(:xpath, '//input[@value = "表示"]').click
       rows = @driver.find_elements(:xpath, "//tr")
       rows[27..58].each do |row|
         cells = row.find_elements(:css, "td[align=RIGHT]").map { |a| a.text.strip.gsub(",", "") }
@@ -514,9 +522,9 @@ module HotelPrice::Rakuten
     end
 
     def monthly_data_past
-      karute_button = @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[2]/tbody/tr[1]/td[1]/table/tbody/tr/td[3]/a/img").click
-      karute_page = @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[5]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/table/tbody/tr/td[2]/input").click
-      month_karute = @driver.find_element(:xpath, "/html/body/center/table[1]/tbody/tr[2]/td/table/tbody/tr[2]/td/form/input[8]").click
+      @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[2]/tbody/tr[1]/td[1]/table/tbody/tr/td[3]/a/img").click
+      @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[5]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/table/tbody/tr/td[2]/input").click
+      @driver.find_element(:xpath, "/html/body/center/table[1]/tbody/tr[2]/td/table/tbody/tr[2]/td/form/input[8]").click
       rows = @driver.find_elements(:xpath, "//tr")
       rows[19..31].each do |row|
         cells = row.find_elements(:css, "td").map { |a| a.text.strip.gsub(",", "") }
