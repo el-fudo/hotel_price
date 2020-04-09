@@ -165,9 +165,11 @@ module HotelPrice::Rakuten
 
     def get_area_rank
       body = get_page_num
+      puts body
       (1..body[:page_num]).each do |i|
         body[:page_num] = i
         rank = search_ranking(body)
+        puts rank
         return rank if rank[:status] == "found"
       end
       { status: "not_found" }
