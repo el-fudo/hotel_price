@@ -7,7 +7,7 @@ module HotelPrice::Expedia
 
       query_string = make_query_string(checkin_date.to_s, num_adults)
       url = "https://www.expedia.co.jp/ja/#{expedia_hotel_id}.Hotel-Information?#{query_string}"
-      driver = self.get_selenium_driver
+      driver = self.get_selenium_driver mode
       driver.get(url)
       sleep 2
 
@@ -46,10 +46,17 @@ module HotelPrice::Expedia
       "rm1=a#{num_adults}"
     end
 
-    def self.get_selenium_driver
-      options = Selenium::WebDriver::Firefox::Options.new
-      options.add_argument("-headless")
-      Selenium::WebDriver.for :firefox, options: options
+    def self.get_selenium_driver(mode = 0)
+      if mode == 1
+        firefox_capabilities = Selenium::WebDriver::Remote::Capabilities.firefox
+        Selenium::WebDriver.for(:remote, url: "http://selenium-hub:4444/wd/hub", desired_capabilities: firefox_capabilities)
+      elsif mode == 2
+        Selenium::WebDriver.for :firefox
+      else
+        options = Selenium::WebDriver::Firefox::Options.new
+        options.add_argument("-headless")
+        Selenium::WebDriver.for :firefox, options: options
+      end
     end
   end
 end
