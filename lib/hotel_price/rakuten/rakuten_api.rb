@@ -180,8 +180,7 @@ module HotelPrice::Rakuten
         middle_class_code: params[:middle_class_code],
         small_class_code: params[:small_class_code],
         detail_class_code: params[:detail_class_code],
-        page_num: params[:page_num],
-        area_name: params[:area_name]
+        page_num: params[:page_num]
       }
       url = "https://app.rakuten.co.jp/services/api/Travel/SimpleHotelSearch/20170426?applicationId=#{@config[:rakuten_api_key]}&largeClassCode=japan&middleClassCode=#{body[:middle_class_code]}&smallClassCode=#{body[:small_class_code]}&detailClassCode=#{body[:detail_class_code]}&page=#{body[:page_num]}"
       uri = URI.parse(url)

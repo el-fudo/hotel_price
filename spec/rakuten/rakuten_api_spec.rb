@@ -13,7 +13,7 @@ RSpec.describe HotelPrice::Rakuten::RakutenAPI, type: :class do
     end
 
     it "should get hotel info" do
-      expect(@a1.hotel_info[:rakuten_hotel_id]).to eq 19908
+      expect(@a1.hotel_info[:rakuten_hotel_id].to_s).to eq @rakuten_hotel_id.to_s
     end
 
     it "should get min price" do
@@ -26,8 +26,14 @@ RSpec.describe HotelPrice::Rakuten::RakutenAPI, type: :class do
     end
 
     it "should get page ranking" do
-      page_num = 1
-      result = @a1.search_ranking page_num
+      params = {
+        middle_class_code: "tokyo",
+        small_class_code: "tokyo",
+        detail_class_code: "B",
+        page_num: 1,
+        area_name: ""
+      }
+      result = @a1.search_ranking params
       expect(result[:status]).to eq("found") | eq("not_found")
     end
 
@@ -38,7 +44,6 @@ RSpec.describe HotelPrice::Rakuten::RakutenAPI, type: :class do
 
     it "should return area rank" do
       result = @a1.get_area_rank
-      puts result
       expect(result[:status]).to eq("found") | eq("not_found")
     end
   end
