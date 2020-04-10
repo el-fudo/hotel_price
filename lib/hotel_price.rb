@@ -42,7 +42,7 @@ module HotelPrice
     case mode
     when 1
       firefox_capabilities = Selenium::WebDriver::Remote::Capabilities.firefox
-      Selenium::WebDriver.for(:remote, url: "http://selenium-hub:4444/wd/hub", desired_capabilities: firefox_capabilities)
+      Selenium::WebDriver.for(:remote, url: "http://hub:4444/wd/hub", desired_capabilities: firefox_capabilities)
     when 2
       Selenium::WebDriver.for :firefox
     else
