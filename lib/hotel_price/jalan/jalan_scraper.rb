@@ -5,7 +5,6 @@ module HotelPrice::Jalan
 
       query_string = make_query_string(checkin_date.to_s, num_adults)
       url = "https://www.jalan.net/yad#{jalan_hotel_id}/plan/?screenId=UWW3101&yadNo=#{jalan_hotel_id}&#{query_string}"
-      puts url
       driver = HotelPrice.get_selenium_driver mode
       driver.get(url)
       sleep 2
