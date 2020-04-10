@@ -9,7 +9,7 @@ module HotelPrice::Rakuten
         mode: params[:mode] ||= 0
       }
       @wait = Selenium::WebDriver::Wait.new(timeout: 100)
-      @driver = self.get_selenium_driver @config[:mode]
+      @driver = HotelPrice.get_selenium_driver @config[:mode]
       if @config[:chain]
         go_to_management_page_chain
       else
