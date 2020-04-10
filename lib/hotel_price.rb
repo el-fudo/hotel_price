@@ -38,13 +38,18 @@ module HotelPrice
 
   private
 
-  def self.get_selenium_driver
-    # firefox_capabilities = Selenium::WebDriver::Remote::Capabilities.firefox
-    # @driver = Selenium::WebDriver.for(:remote, url: "http://hub:4444/wd/hub", desired_capabilities: firefox_capabilities)
-
-    options = Selenium::WebDriver::Firefox::Options.new
-    options.add_argument("-headless")
-    Selenium::WebDriver.for :firefox, options: options
+  def self.get_selenium_driver(mode = 0)
+    case mode
+    when 1
+      firefox_capabilities = Selenium::WebDriver::Remote::Capabilities.firefox
+      Selenium::WebDriver.for(:remote, url: "http://selenium-hub:4444/wd/hub", desired_capabilities: firefox_capabilities)
+    when 2
+      Selenium::WebDriver.for :firefox
+    else
+      options = Selenium::WebDriver::Firefox::Options.new
+      options.add_argument("-headless")
+      Selenium::WebDriver.for :firefox, options: options
+    end
   end
 
   class Configuration
