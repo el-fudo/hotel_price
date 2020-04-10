@@ -9,24 +9,11 @@ module HotelPrice::Rakuten
         mode: params[:mode] ||= 0
       }
       @wait = Selenium::WebDriver::Wait.new(timeout: 100)
-      @driver = get_selenium_driver @config[:mode]
+      @driver = self.get_selenium_driver @config[:mode]
       if @config[:chain]
         go_to_management_page_chain
       else
         go_to_management_page_single
-      end
-    end
-
-    def get_selenium_driver(mode = 0)
-      if mode == 1
-        firefox_capabilities = Selenium::WebDriver::Remote::Capabilities.firefox
-        Selenium::WebDriver.for(:remote, url: "http://selenium-hub:4444/wd/hub", desired_capabilities: firefox_capabilities)
-      elsif mode == 2
-        Selenium::WebDriver.for :firefox
-      else
-        options = Selenium::WebDriver::Firefox::Options.new
-        options.add_argument("-headless")
-        Selenium::WebDriver.for :firefox, options: options
       end
     end
 

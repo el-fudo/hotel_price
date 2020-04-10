@@ -2,12 +2,12 @@ require "date"
 
 module HotelPrice::Agoda
   class AgodaScraper
-    def self.get_price(agoda_hotel_id, checkin_date, num_adults)
+    def self.get_price(agoda_hotel_id, checkin_date, num_adults, mode = 0)
       date = DateTime.now.strftime("%Y-%m-%d")
 
       query_string = make_query_string(checkin_date.to_s, num_adults)
       url = "https://www.agoda.com/ja-jp/#{agoda_hotel_id}.html?#{query_string}"
-      driver = self.get_selenium_driver mode
+      driver = HotelPrice.get_selenium_driver mode
       driver.get(url)
       sleep 2
 
@@ -43,7 +43,5 @@ module HotelPrice::Agoda
       return "" if num_adults.to_i <= 1
       "adults=#{num_adults}"
     end
-
-
   end
 end

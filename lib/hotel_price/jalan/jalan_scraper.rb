@@ -6,7 +6,7 @@ module HotelPrice::Jalan
       query_string = make_query_string(checkin_date.to_s, num_adults)
       url = "https://www.jalan.net/yad#{jalan_hotel_id}/plan/?screenId=UWW3101&yadNo=#{jalan_hotel_id}&#{query_string}"
       puts url
-      driver = self.get_selenium_driver mode
+      driver = HotelPrice.get_selenium_driver mode
       driver.get(url)
       sleep 2
       @price_box = []
@@ -20,11 +20,11 @@ module HotelPrice::Jalan
             room_name: e.find_element(class_name: "p-searchResultItem__planName").text,
             plan_name: f.find_element(class_name: "p-planCassette__header").text
           }
-        rescue
+        rescue StandardError
         end
       end
-      @price_box.sort_by { |a, b, c| c }.reverse.first
-    rescue
+      @price_box.sort_by { |_a, _b, c| c }.reverse.first
+    rescue StandardError
       { date: date, min_price: 0 }
     end
 

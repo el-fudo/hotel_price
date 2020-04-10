@@ -1,14 +1,15 @@
 RSpec.describe HotelPrice::Rakuten::RakutenAPI, type: :class do
   describe "Rakuten API" do
     before(:each) do
+      @rakuten_hotel_id = "68565"
       @a1 = HotelPrice::Rakuten::RakutenAPI.new(
-        rakuten_hotel_id: "68565",
+        rakuten_hotel_id: @rakuten_hotel_id,
         rakuten_api_key: ENV["RT_API_KEY"]
       )
     end
 
     it "should set Rakuten hotel ID" do
-      expect(@a1.instance_variable_get(:@config)[:rakuten_hotel_id]).to eq "19908"
+      expect(@a1.instance_variable_get(:@config)[:rakuten_hotel_id]).to eq @rakuten_hotel_id
     end
 
     it "should get hotel info" do

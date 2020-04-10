@@ -2,12 +2,13 @@ require "date"
 
 module HotelPrice::Booking
   class BookingScraper
-    def self.get_price(booking_hotel_id, checkin_date, num_adults)
+
+    def self.get_price(booking_hotel_id, checkin_date, num_adults, mode = 0)
       date = DateTime.now.strftime("%Y-%m-%d")
 
       query_string = make_query_string(checkin_date.to_s, num_adults)
       url = "https://www.booking.com/hotel/jp/#{booking_hotel_id}.ja.html?#{query_string}"
-      driver = self.get_selenium_driver mode
+      driver = HotelPrice.get_selenium_driver mode
       driver.get(url)
       sleep 2
 

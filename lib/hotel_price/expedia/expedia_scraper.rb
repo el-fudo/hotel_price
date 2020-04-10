@@ -2,12 +2,12 @@ require "date"
 
 module HotelPrice::Expedia
   class ExpediaScraper
-    def self.get_price(expedia_hotel_id, checkin_date, num_adults)
+    def self.get_price(expedia_hotel_id, checkin_date, num_adults, mode = 0)
       date = DateTime.now.strftime("%Y-%m-%d")
 
       query_string = make_query_string(checkin_date.to_s, num_adults)
       url = "https://www.expedia.co.jp/ja/#{expedia_hotel_id}.Hotel-Information?#{query_string}"
-      driver = self.get_selenium_driver mode
+      driver = HotelPrice.get_selenium_driver mode
       driver.get(url)
       sleep 2
 
@@ -32,12 +32,11 @@ module HotelPrice::Expedia
       "#{cd_args}&#{na_args}&x_pwa=1&rfrr=HSR&pwa_ts=1583335742618&swpToggleOn=true&regionId=3250&destination=Sapporo%2C+Hokkaido%2C+Japan&destType=MARKET&neighborhoodId=6290332&selected=5224778&sort=recommended&top_dp=5686&top_cur=JPY"
     end
 
-
     def self.make_date_args checkin_date
       Date.parse checkin_date rescue return ""
       t = Date.parse(checkin_date)
       checkin_arg = t.strftime("chkin=%Y-%m-%d")
-      checkout_arg = (t+1).strftime("chkout=%Y-%m-%d")
+      checkout_arg = (t + 1).strftime("chkout=%Y-%m-%d")
       "#{checkin_arg}&#{checkout_arg}"
     end
 

@@ -8,7 +8,7 @@ module HotelPrice::Rakuten
 
       query_string = make_query_string(checkin_date.to_s, num_adults)
       url = "https://hotel.travel.rakuten.co.jp/hotelinfo/plan/#{rakuten_hotel_id}?#{query_string}"
-      driver = self.get_selenium_driver mode
+      driver = HotelPrice.get_selenium_driver mode
       driver.get(url)
       sleep 2
       driver.find_elements(class_name: "planThumb").first rescue return ""
@@ -18,7 +18,7 @@ module HotelPrice::Rakuten
       room_name = first_plan.find_element(tag_name: "h6").text
       plan_name = first_plan.find_element(tag_name: "h4").text
       { date: date, min_price: price, hotel_name: hotel_name, room_name: room_name, plan_name: plan_name }
-    rescue
+    rescue StandardError
       { date: date, min_price: 0 }
     end
 
@@ -41,10 +41,9 @@ module HotelPrice::Rakuten
       "f_otona_su=#{num_adults}&f_kin2=0&f_kin=&f_s1=0&f_s2=0&f_y1=0&f_y2=0&f_y3=0&f_y4=0"
     end
 
-
     def self.review rakuten_hotel_id, mode = 0
-      driver = self.get_selenium_driver mode
-      driver.get("https://travel.rakuten.co.jp/HOTEL/#{rakuten_hotel_id.to_s}/review.html")
+      driver = HotelPrice.get_selenium_driver mode
+      driver.get("https://travel.rakuten.co.jp/HOTEL/#{rakuten_hotel_id}/review.html")
       sleep 2
       comment_area = driver.find_elements(:class_name, "commentBox")
       data = comment_area.map do |f|
@@ -53,12 +52,12 @@ module HotelPrice::Rakuten
           generation = 0
           gender = ""
         else
-          username = f.find_element(class_name: "user").text.match(/(^.+ )/).to_s.strip 
-          generation = f.find_element(class_name: "user").text.match(/\[.+代/).to_s.gsub("[","").gsub("代", "")
+          username = f.find_element(class_name: "user").text.match(/(^.+ )/).to_s.strip
+          generation = f.find_element(class_name: "user").text.match(/\[.+代/).to_s.gsub("[", "").gsub("代", "")
           gender = f.find_element(class_name: "user").text.match(/\/../).to_s.gsub("/", "")
         end
         {
-          date: f.find_element(class_name: "time").text.gsub("年","").gsub("月", "").gsub("日", ""),
+          date: f.find_element(class_name: "time").text.gsub("年", "").gsub("月", "").gsub("日", ""),
           rate: f.find_element(class_name: "rate").text,
           username: username,
           generation: generation,
@@ -72,7 +71,7 @@ module HotelPrice::Rakuten
     end
 
     def self.get_photo_num rakuten_hotel_id, mode = 0
-      driver = self.get_selenium_driver mode
+      driver = HotelPrice.get_selenium_driver mode
       driver.get "https://hotel.travel.rakuten.co.jp/hinfo/#{rakuten_hotel_id}/"
       sleep 2
       num = driver.find_element(:id, "navPht").text.gsub("写真・動画(", "").gsub(")", "").to_i
@@ -81,7 +80,7 @@ module HotelPrice::Rakuten
     end
 
     def self.get_bf_plan_num rakuten_hotel_id, mode = 0
-      driver = self.get_selenium_driver mode
+      driver = HotelPrice.get_selenium_driver mode
       driver.get "https://hotel.travel.rakuten.co.jp/hotelinfo/plan/#{rakuten_hotel_id}"
       driver.find_element(:id, "focus1").click
       driver.find_element(:id, "dh-squeezes-submit").click
@@ -92,7 +91,7 @@ module HotelPrice::Rakuten
     end
 
     def self.get_dayuse_plan_num rakuten_hotel_id, mode = 0
-      driver = self.get_selenium_driver mode
+      driver = HotelPrice.get_selenium_driver mode
       driver.get "https://hotel.travel.rakuten.co.jp/hotelinfo/plan/#{rakuten_hotel_id}"
       sleep 10
       driver.find_element(:id, "du-radio").click
@@ -104,13 +103,13 @@ module HotelPrice::Rakuten
     end
 
     def self.get_detail_class_code rakuten_hotel_id, mode = 0
-      driver = self.get_selenium_driver mode
+      driver = HotelPrice.get_selenium_driver mode
       driver.get "https://hotel.travel.rakuten.co.jp/hinfo/?f_no=#{rakuten_hotel_id}"
       {
         status: "found",
         detail_class_code: driver.find_element(id: "breadcrumbs-detail").attribute("href").match(/\/.\./).to_s.gsub("/", "").gsub(".", "")
       }
-    rescue
+    rescue StandardError
       {
         status: "not_found",
         detail_class_code: ""

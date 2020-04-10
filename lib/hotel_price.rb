@@ -36,7 +36,7 @@ module HotelPrice
     end
   end
 
-  private
+  protected
 
   def self.get_selenium_driver(mode = 0)
     case mode
@@ -51,6 +51,8 @@ module HotelPrice
       Selenium::WebDriver.for :firefox, options: options
     end
   end
+
+  private
 
   class Configuration
     # Agoda API key
