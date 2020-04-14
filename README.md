@@ -26,11 +26,14 @@ Or install it yourself as:
 ### Rakuten Travel
 
 #### Rakuten API
-Set `rakuten_hotel_id` 
+Initialize with `rakuten_hotel_id` and `Rakuten Travel API key`
+Rakuten Travel API Reference : https://webservice.rakuten.co.jp/api/simplehotelsearch/
+
 
 ```ruby
-hotel = HotelPrice::RakutenTravel::RakutenAPI.new(
-  rakuten_hotel_id: "128552
+hotel = HotelPrice::Rakuten::RakutenScraper.new(
+  rakuten_hotel_id: "128552",
+  rakuten_api_key: "api_key"
 )
 ```
 
@@ -39,6 +42,15 @@ Get Hotel Info
 ```ruby
 puts hotel.hotel_info
 ```
+
+
+### RakutenScraper
+Argments : `rakuten_hotel_id`, `YYYY-MM-DD`, `adult_nums`
+
+```ruby
+HotelPrice::Rakuten::RakutenScraper.get_price("128552", (Date.today + 45.day).to_s, 1)
+```
+
 
 ## Development
 
