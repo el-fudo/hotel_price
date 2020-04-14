@@ -334,14 +334,14 @@ module HotelPrice::Rakuten
       }
     end
 
-    def get_area_seo_rank
-      @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[1]/tbody/tr[2]/td/table/tbody/tr[1]/td[5]/table/tbody/tr/td/table[1]/tbody/tr[5]/td[2]/font/b")
-      rows = @driver.find_elements(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[1]/tbody/tr[2]/td/table/tbody/tr[1]/td[5]/table/tbody/tr/td/table[1]/tbody/tr[5]")
-      rows.each do |f|
-        cells = f.find_elements(:css, "td").map(&:text)
-        return cells[1]
-      end
-    end
+    # def get_area_seo_rank
+    #   @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[1]/tbody/tr[2]/td/table/tbody/tr[1]/td[5]/table/tbody/tr/td/table[1]/tbody/tr[5]/td[2]/font/b")
+    #   rows = @driver.find_elements(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[1]/tbody/tr[2]/td/table/tbody/tr[1]/td[5]/table/tbody/tr/td/table[1]/tbody/tr[5]")
+    #   rows.each do |f|
+    #     cells = f.find_elements(:css, "td").map(&:text)
+    #     return cells[1]
+    #   end
+    # end
 
     def degit2 num
       num = "0#{num}" if num.to_s.size == 1
@@ -430,43 +430,39 @@ module HotelPrice::Rakuten
       @driver.quit
     end
 
-    def daily_data_past
-      @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[2]/tbody/tr[1]/td[1]/table/tbody/tr/td[3]/a/img").click
-      @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[5]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/table/tbody/tr/td[1]/input").click
-      sleep 3
-      (0..13).each do |i|
-        select = Selenium::WebDriver::Support::Select.new(@driver.find_element(:name, "f_date"))
-        select.select_by(:index, i)
-        display_data = @driver.find_element(:xpath, '//input[@value = "表示"]')
-        display_data.click
-        rows = @driver.find_elements(:xpath, "//tr")
-        rows[27..58].each do |row|
-          cells = row.find_elements(:css, "td[align=RIGHT]").map { |a| a.text.strip.gsub(",", "") }
-          break unless cells[5] && cells[5].to_i > 1
-          @output_hash = {
-            date: cells[0],
-            reservation_sales: cells[1],
-            access_ppl: cells[2],
-            cvr: cells[3],
-            reservation_unit_price: cells[4],
-            pv: cells[5],
-            pc_retained: cells[6],
-            pc_deliveries: cells[7],
-            pc_total_delivered: cells[8],
-            sp_retained: cells[9],
-            sp_deliveries: cells[10],
-            sp_total_delivered: cells[11]
-          }
-          puts "saved in DB:#{@output_hash}" if RakutenDaily.create(@output_hash).valid?
-        end
-      end
-      @driver.quit
-    rescue StandardError => e
-      @driver.quit
-      puts e.to_json
-    end
+    # def daily_data_past
+    #   @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[2]/tbody/tr[1]/td[1]/table/tbody/tr/td[3]/a/img").click
+    #   @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[5]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/table/tbody/tr/td[1]/input").click
+    #   sleep 3
+    #   (0..13).each do |i|
+    #     select = Selenium::WebDriver::Support::Select.new(@driver.find_element(:name, "f_date"))
+    #     select.select_by(:index, i)
+    #     display_data = @driver.find_element(:xpath, '//input[@value = "表示"]')
+    #     display_data.click
+    #     rows = @driver.find_elements(:xpath, "//tr")
+    #     rows[27..58].map do |row|
+    #       cells = row.find_elements(:css, "td[align=RIGHT]").map { |a| a.text.strip.gsub(",", "") }
+    #       break unless cells[5] && cells[5].to_i > 1
+    #       {
+    #         date: cells[0],
+    #         reservation_sales: cells[1],
+    #         access_ppl: cells[2],
+    #         cvr: cells[3],
+    #         reservation_unit_price: cells[4],
+    #         pv: cells[5],
+    #         pc_retained: cells[6],
+    #         pc_deliveries: cells[7],
+    #         pc_total_delivered: cells[8],
+    #         sp_retained: cells[9],
+    #         sp_deliveries: cells[10],
+    #         sp_total_delivered: cells[11]
+    #       }
+    #     end
+    #   end
+    # end
 
-    def daily_data_update
+    def daily_data
+      puts "start"
       @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[2]/tbody/tr[1]/td[1]/table/tbody/tr/td[3]/a/img").click
       @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[5]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/table/tbody/tr/td[1]/input").click
       sleep 3
@@ -480,32 +476,29 @@ module HotelPrice::Rakuten
         select = Selenium::WebDriver::Support::Select.new(@driver.find_element(:name, "f_date"))
         select.select_by(:value, value)
       end
+      puts "scraper"
       @driver.find_element(:xpath, '//input[@value = "表示"]').click
       rows = @driver.find_elements(:xpath, "//tr")
+      data = []
       rows[27..58].each do |row|
         cells = row.find_elements(:css, "td[align=RIGHT]").map { |a| a.text.strip.gsub(",", "") }
         break unless cells[5] && cells[5].to_i > 1
-
-        @output_hash = {
-          "date" => cells[0],
-          "hotel_id" => @hotel.id,
-          "reservation_sales" => cells[1],
-          "access_ppl" => cells[2],
-          "cvr" => cells[3],
-          "reservation_unit_price" => cells[4],
-          "pv" => cells[5],
-          "pc_retained" => cells[6],
-          "pc_deliveries" => cells[7],
-          "pc_total_delivered" => cells[8],
-          "sp_retained" => cells[9],
-          "sp_deliveries" => cells[10],
-          "sp_total_delivered" => cells[11]
+        data << {
+          date: cells[0],
+          reservation_sales: cells[1],
+          access_ppl: cells[2],
+          cvr: cells[3],
+          reservation_unit_price: cells[4],
+          pv: cells[5],
+          pc_retained: cells[6],
+          pc_deliveries: cells[7],
+          pc_total_delivered: cells[8],
+          sp_retained: cells[9],
+          sp_deliveries: cells[10],
+          sp_total_delivered: cells[11]
         }
-        puts "saved in DB:#{@output_hash}" if RakutenDaily.create(@output_hash).valid?
       end
-      @driver.quit
-    rescue StandardError => e
-      @driver.quit
+      data
     end
 
     def monthly_data_past
@@ -513,13 +506,11 @@ module HotelPrice::Rakuten
       @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[5]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/table/tbody/tr/td[2]/input").click
       @driver.find_element(:xpath, "/html/body/center/table[1]/tbody/tr[2]/td/table/tbody/tr[2]/td/form/input[8]").click
       rows = @driver.find_elements(:xpath, "//tr")
-      rows[19..31].each do |row|
+      rows[19..31].map do |row|
         cells = row.find_elements(:css, "td").map { |a| a.text.strip.gsub(",", "") }
         break unless cells[9] && cells[9].to_i > 1
-
-        data = {
+        {
           date: cells[0].gsub("/", "").to_s + "01",
-          hotel_id: Branch.find_by_rakuten_hotel_id(@config[:rakuten_hotel_id]).hotel_id,
           reservation_sales: cells[1],
           reservation_ppl: cells[2],
           access_ppl: cells[3],
@@ -535,12 +526,7 @@ module HotelPrice::Rakuten
           rmail_delivery_num: cells[13],
           prize: cells[14]
         }
-        puts "db saved : #{data}" if RakutenKaruteReservation.create(data).valid?
       end
-      @driver.quit
-    rescue StandardError => e
-      puts e.to_json
-      @driver.quit
     end
   end
 end

@@ -6,8 +6,13 @@ RSpec.describe HotelPrice::Rakuten::RakutenConsole, type: :class do
         login_id: ENV["RT_LOGIN"],
         login_pw: ENV["RT_PW"],
         rakuten_hotel_id: @rakuten_hotel_id,
-        chain: true
+        chain: true,
+        mode: 0
       )
+    end
+
+    it "should return Login Check Result" do
+      expect(@a1.login_check[:status]).to eq "success"
     end
 
     it "should set Rakuten hotel ID" do
@@ -18,5 +23,12 @@ RSpec.describe HotelPrice::Rakuten::RakutenConsole, type: :class do
       expect(@a1.get_plan_num).to be_an(Integer)
     end
 
+    it "should return Monthly Karute Reservation Sales Datum" do
+      expect(@a1.monthly_data_past[0][:access_ppl].to_i).to be_an(Integer)
+    end
+
+    it "should return Daily Reservation Sales Datum" do
+      expect(@a1.daily_data[0][:access_ppl].to_i).to be_an(Integer)
+    end
   end
 end

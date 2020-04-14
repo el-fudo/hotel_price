@@ -21,14 +21,13 @@ RSpec.describe HotelPrice::Rakuten::RakutenScraper, type: :class do
     end
 
     it "should return detail class code" do
-      a1 = HotelPrice::Rakuten::RakutenScraper.get_detail_class_code 173011
+      a1 = HotelPrice::Rakuten::RakutenScraper.get_detail_class_code 68565
       expect(a1[:status]).to eq("found") | eq("not_found")
     end
 
     it "should return min price" do
-      a1 = HotelPrice::Rakuten::RakutenScraper.get_price("173011", (Date.today + 45.day).to_s, 1)
+      a1 = HotelPrice::Rakuten::RakutenScraper.get_price("68565", (Date.today + 45.day).to_s, 1)
       expect(a1[:min_price]).to be_a Integer
     end
-
   end
 end

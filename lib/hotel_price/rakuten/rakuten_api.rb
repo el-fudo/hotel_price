@@ -163,16 +163,6 @@ module HotelPrice::Rakuten
       @data_hash
     end
 
-    def get_area_rank
-      body = get_page_num
-      (1..body[:page_num]).each do |i|
-        body[:page_num] = i
-        rank = search_ranking(body)
-        return rank if rank[:status] == "found"
-      end
-      { status: "not_found" }
-    end
-
     def search_ranking params
       body = {
         middle_class_code: params[:middle_class_code],
@@ -203,8 +193,7 @@ module HotelPrice::Rakuten
       { status: "not_found" }
     end
 
-    def get_page_num
-      detail_class_code = HotelPrice::Rakuten::RakutenScraper.get_detail_class_code(@config[:rakuten_hotel_id])[:detail_class_code]
+    def get_page_num detail_class_code
       hotel = hotel_info
       url = "https://app.rakuten.co.jp/services/api/Travel/SimpleHotelSearch/20170426?applicationId=#{@config[:rakuten_api_key]}&largeClassCode=japan&middleClassCode=#{hotel[:middle_class_code]}&smallClassCode=#{hotel[:small_class_code]}&detailClassCode=#{detail_class_code}"
       uri = URI.parse(url)
