@@ -462,7 +462,6 @@ module HotelPrice::Rakuten
     # end
 
     def daily_data
-      puts "start"
       @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[2]/tbody/tr[1]/td[1]/table/tbody/tr/td[3]/a/img").click
       @driver.find_element(:xpath, "/html/body/table[2]/tbody/tr/td[3]/table[5]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/table/tbody/tr/td[1]/input").click
       sleep 3
@@ -476,7 +475,6 @@ module HotelPrice::Rakuten
         select = Selenium::WebDriver::Support::Select.new(@driver.find_element(:name, "f_date"))
         select.select_by(:value, value)
       end
-      puts "scraper"
       @driver.find_element(:xpath, '//input[@value = "表示"]').click
       rows = @driver.find_elements(:xpath, "//tr")
       data = []

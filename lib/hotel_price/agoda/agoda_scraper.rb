@@ -23,7 +23,7 @@ module HotelPrice::Agoda
       room_name_element = driver.find_elements(:xpath, "//span[@data-selenium='masterroom-title-name']")
       room_name = room_name_element.first.text unless room_name_element.empty?
 
-      { date: date, min_price: price, hotel_name: hotel_name, room_name: room_name }
+      { checkin_date: checkin_date, min_price: price, hotel_name: hotel_name, room_name: room_name }
     end
 
     def self.make_query_string(checkin_date, num_adults)

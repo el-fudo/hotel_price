@@ -84,7 +84,7 @@ module HotelPrice::Rakuten
       driver.get "https://hotel.travel.rakuten.co.jp/hotelinfo/plan/#{rakuten_hotel_id}"
       driver.find_element(:id, "focus1").click
       driver.find_element(:id, "dh-squeezes-submit").click
-      sleep 30
+      sleep 3
       plan_num = driver.find_elements(:class, "planThumb")
       driver.quit
       plan_num.size
@@ -93,10 +93,10 @@ module HotelPrice::Rakuten
     def self.get_dayuse_plan_num rakuten_hotel_id, mode = 0
       driver = HotelPrice.get_selenium_driver mode
       driver.get "https://hotel.travel.rakuten.co.jp/hotelinfo/plan/#{rakuten_hotel_id}"
-      sleep 10
+      sleep 5
       driver.find_element(:id, "du-radio").click
       driver.find_element(:id, "dh-submit").click
-      sleep 10
+      sleep 5
       plan_num = driver.find_elements(:class, "planThumb")
       driver.quit
       plan_num.size
