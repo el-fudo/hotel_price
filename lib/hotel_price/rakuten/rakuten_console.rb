@@ -320,14 +320,12 @@ module HotelPrice::Rakuten
     def login_check
       exp = @driver.find_element(:xpath, "/html/body/table[1]/tbody/tr[1]/td/table/tbody/tr/td[5]/table/tbody/tr[1]/td").text.gsub("次回パスワード更新日：", "").gsub("※事前にパスワードを変更されたい場合はこちらをご参照ください。\n", "")
       rakuten_hotel_id = @driver.find_element(:xpath, "/html/body/table[1]/tbody/tr[1]/td/table/tbody/tr/td[2]/table/tbody/tr/td").text.gsub("施設番号 : ", "").split("\n")[0]
-      @driver.quit
       {
         status: "success",
         password_exp_date: exp,
         rakuten_hotel_id: rakuten_hotel_id
       }
     rescue StandardError => e
-      @driver.quit
       {
         status: "error",
         error: e.to_s
