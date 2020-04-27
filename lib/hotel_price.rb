@@ -23,7 +23,7 @@ module HotelPrice
   def self.rakuten_travel
     driver = self.get_selenium_driver
     rakuten_travel_hotel_id = 128552
-    driver.get("https://travel.rakuten.co.jp/HOTEL/#{rakuten_travel_hotel_id.to_s}/review.html")
+    driver.get("https://travel.rakuten.co.jp/HOTEL/#{rakuten_travel_hotel_id}/review.html")
     sleep 2
     comment_area = driver.find_elements(:class_name, "commentReputationBoth")
     comment_area.map do |f|
@@ -46,9 +46,12 @@ module HotelPrice
     when 2
       Selenium::WebDriver.for :firefox
     else
-      options = Selenium::WebDriver::Firefox::Options.new
+      options = Selenium::WebDriver::Chrome::Options.new
+      options.add_argument("--ignore-certificate-errors")
+      options.add_argument("--disable-popup-blocking")
+      options.add_argument("--disable-translate")
       options.add_argument("-headless")
-      Selenium::WebDriver.for :firefox, options: options
+      Selenium::WebDriver.for :chrome, options: options
     end
   end
 
