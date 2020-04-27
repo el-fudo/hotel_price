@@ -20,9 +20,10 @@ module HotelPrice::Jalan
             plan_name: f.find_element(class_name: "p-planCassette__header").text
           }
         rescue StandardError
+          { date: date, min_price: 0 }
         end
       end
-      @price_box.sort_by { |_a, _b, c| c }.reverse.first
+      @price_box.sort_by { |_a, _b, c| c }.reverse.first || { date: date, min_price: 0 }
     rescue StandardError
       { date: date, min_price: 0 }
     end
