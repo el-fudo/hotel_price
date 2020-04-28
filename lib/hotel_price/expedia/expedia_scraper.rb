@@ -2,12 +2,18 @@ require "date"
 
 module HotelPrice::Expedia
   class ExpediaScraper
-    def self.get_price(expedia_hotel_id, checkin_date, num_adults, mode = 0)
+    @mode
+
+    def initialize(mode = :chrome)
+      @mode = mode
+    end
+
+    def get_price(expedia_hotel_id, checkin_date, num_adults)
       date = DateTime.now.strftime("%Y-%m-%d")
 
       query_string = make_query_string(checkin_date.to_s, num_adults)
       url = "https://www.expedia.co.jp/ja/#{expedia_hotel_id}.Hotel-Information?#{query_string}"
-      driver = HotelPrice.get_selenium_driver mode
+      driver = HotelPrice.get_selenium_driver @mode
       driver.get(url)
       sleep 2
 
@@ -26,13 +32,13 @@ module HotelPrice::Expedia
       { checkin_date: checkin_date, min_price: price, hotel_name: hotel_name, room_name: room_name }
     end
 
-    def self.make_query_string(checkin_date, num_adults)
+    def make_query_string(checkin_date, num_adults)
       cd_args = make_date_args checkin_date
       na_args = make_num_adults_arg num_adults
       "#{cd_args}&#{na_args}&x_pwa=1&rfrr=HSR&pwa_ts=1583335742618&swpToggleOn=true&regionId=3250&destination=Sapporo%2C+Hokkaido%2C+Japan&destType=MARKET&neighborhoodId=6290332&selected=5224778&sort=recommended&top_dp=5686&top_cur=JPY"
     end
 
-    def self.make_date_args checkin_date
+    def make_date_args checkin_date
       Date.parse checkin_date rescue return ""
       t = Date.parse(checkin_date)
       checkin_arg = t.strftime("chkin=%Y-%m-%d")
@@ -40,7 +46,7 @@ module HotelPrice::Expedia
       "#{checkin_arg}&#{checkout_arg}"
     end
 
-    def self.make_num_adults_arg num_adults
+    def make_num_adults_arg num_adults
       return "" if num_adults.to_i <= 1
       "rm1=a#{num_adults}"
     end

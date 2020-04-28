@@ -3,12 +3,18 @@ require "date"
 module HotelPrice::Booking
   class BookingScraper
 
-    def self.get_price(booking_hotel_id, checkin_date, num_adults, mode = 0)
+    @mode
+
+    def initialize(mode = :chrome)
+      @mode = mode
+    end
+
+    def get_price(booking_hotel_id, checkin_date, num_adults)
       date = DateTime.now.strftime("%Y-%m-%d")
 
       query_string = make_query_string(checkin_date.to_s, num_adults)
       url = "https://www.booking.com/hotel/jp/#{booking_hotel_id}.ja.html?#{query_string}"
-      driver = HotelPrice.get_selenium_driver mode
+      driver = HotelPrice.get_selenium_driver @mode
       driver.get(url)
       sleep 2
 
@@ -29,13 +35,13 @@ module HotelPrice::Booking
       { checkin_date: checkin_date, min_price: price, hotel_name: hotel_name, room_name: room_name }
     end
 
-    def self.make_query_string(checkin_date, num_adults)
+    def make_query_string(checkin_date, num_adults)
       cd_args = make_date_args checkin_date
       na_args = make_num_adults_arg num_adults
       "#{cd_args}&#{na_args}&dist=0&do_availability_check=1&hp_avform=1&hp_group_set=0&no_rooms=1&origin=hp&sb_price_type=total&src=hotel&tab=1&type=total&lang=ja&selected_currency=JPY"
     end
 
-    def self.make_date_args checkin_date
+    def make_date_args checkin_date
       Date.parse checkin_date rescue return ""
       t = Date.parse(checkin_date)
       checkin_arg = t.strftime("checkin_monthday=%d&checkin_year_month=%Y-%m")
@@ -43,7 +49,7 @@ module HotelPrice::Booking
       "#{checkin_arg}&#{checkout_arg}"
     end
 
-    def self.make_num_adults_arg num_adults
+    def make_num_adults_arg num_adults
       return "" if num_adults.to_i <= 1
       "group_adults=#{num_adults}&group_children=0"
     end

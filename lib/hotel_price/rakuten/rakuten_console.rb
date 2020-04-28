@@ -6,7 +6,7 @@ module HotelPrice::Rakuten
         login_pw: params[:login_pw],
         chain: params[:chain] ||= false,
         rakuten_hotel_id: params[:rakuten_hotel_id] ||= 0,
-        mode: params[:mode] ||= 0
+        mode: params[:mode] ||= :chrome
       }
       @wait = Selenium::WebDriver::Wait.new(timeout: 100)
       @driver = HotelPrice.get_selenium_driver @config[:mode]
