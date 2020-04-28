@@ -6,7 +6,8 @@ RSpec.describe HotelPrice::Rakuten::RakutenConsole, type: :class do
         login_id: ENV["RT_LOGIN"],
         login_pw: ENV["RT_PW"],
         rakuten_hotel_id: @rakuten_hotel_id,
-        chain: true
+        chain: true,
+        mode: :firefox
       )
     end
 

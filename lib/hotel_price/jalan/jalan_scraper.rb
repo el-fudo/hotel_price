@@ -6,7 +6,7 @@ module HotelPrice::Jalan
       @mode = mode
     end
 
-    def self.get_price(jalan_hotel_id, checkin_date, num_adults)
+    def get_price(jalan_hotel_id, checkin_date, num_adults)
       date = DateTime.now.strftime("%Y-%m-%d")
 
       query_string = make_query_string(checkin_date.to_s, num_adults)
@@ -34,18 +34,18 @@ module HotelPrice::Jalan
       { date: date, min_price: 0 }
     end
 
-    def self.make_query_string(checkin_date, num_adults)
+    def make_query_string(checkin_date, num_adults)
       cd_args = make_date_args checkin_date
       na_args = make_num_adults_arg num_adults
       "rootCd=7701&callbackHistFlg=1&contHideFlg=1&reSearchFlg=1&roomCrack=100000&smlCd=121108&distCd=01&#{cd_args}&stayCount=1&roomCount=1&#{na_args}&minPrice=0&maxPrice=999999"
     end
 
-    def self.make_date_args checkin_date
+    def make_date_args checkin_date
       Date.parse checkin_date rescue return ""
       Date.parse(checkin_date).strftime("stayYear=%Y&stayMonth=%m&stayDay=%d")
     end
 
-    def self.make_num_adults_arg num_adults
+    def make_num_adults_arg num_adults
       return "" if num_adults.to_i < 1
       "adultNum=#{num_adults}"
     end
