@@ -1,13 +1,19 @@
 require "date"
 
 module HotelPrice::Expedia
+  @mode
+
+  def initialize(mode = :chrome)
+    @mode = mode
+  end
+
   class ExpediaScraper
-    def self.get_price(expedia_hotel_id, checkin_date, num_adults, mode = 0)
+    def self.get_price(expedia_hotel_id, checkin_date, num_adults)
       date = DateTime.now.strftime("%Y-%m-%d")
 
       query_string = make_query_string(checkin_date.to_s, num_adults)
       url = "https://www.expedia.co.jp/ja/#{expedia_hotel_id}.Hotel-Information?#{query_string}"
-      driver = HotelPrice.get_selenium_driver mode
+      driver = HotelPrice.get_selenium_driver @mode
       driver.get(url)
       sleep 2
 

@@ -3,7 +3,13 @@ module HotelPrice::Rakuten
   ## mode 1 - docker selenium
   ## mode 2 - debug
   class RakutenScraper
-    def self.get_price(rakuten_hotel_id, checkin_date, num_adults, mode = 0)
+    @mode
+
+    def initialize(mode = :chrome)
+      @mode = mode
+    end
+
+    def self.get_price(rakuten_hotel_id, checkin_date, num_adults)
       date = DateTime.now.strftime("%Y-%m-%d")
 
       query_string = make_query_string(checkin_date.to_s, num_adults)
@@ -41,8 +47,8 @@ module HotelPrice::Rakuten
       "f_otona_su=#{num_adults}&f_kin2=0&f_kin=&f_s1=0&f_s2=0&f_y1=0&f_y2=0&f_y3=0&f_y4=0"
     end
 
-    def self.review rakuten_hotel_id, mode = 0
-      driver = HotelPrice.get_selenium_driver mode
+    def self.review rakuten_hotel_id
+      driver = HotelPrice.get_selenium_driver @mode
       driver.get("https://travel.rakuten.co.jp/HOTEL/#{rakuten_hotel_id}/review.html")
       sleep 2
       comment_area = driver.find_elements(:class_name, "commentBox")
@@ -70,8 +76,8 @@ module HotelPrice::Rakuten
       data
     end
 
-    def self.get_photo_num rakuten_hotel_id, mode = 0
-      driver = HotelPrice.get_selenium_driver mode
+    def self.get_photo_num rakuten_hotel_id
+      driver = HotelPrice.get_selenium_driver @mode
       driver.get "https://hotel.travel.rakuten.co.jp/hinfo/#{rakuten_hotel_id}/"
       sleep 2
       num = driver.find_element(:id, "navPht").text.gsub("写真・動画(", "").gsub(")", "").to_i
@@ -79,8 +85,8 @@ module HotelPrice::Rakuten
       num
     end
 
-    def self.get_bf_plan_num rakuten_hotel_id, mode = 0
-      driver = HotelPrice.get_selenium_driver mode
+    def self.get_bf_plan_num rakuten_hotel_id
+      driver = HotelPrice.get_selenium_driver @mode
       driver.get "https://hotel.travel.rakuten.co.jp/hotelinfo/plan/#{rakuten_hotel_id}"
       driver.find_element(:id, "focus1").click
       driver.find_element(:id, "dh-squeezes-submit").click
@@ -90,8 +96,8 @@ module HotelPrice::Rakuten
       plan_num.size
     end
 
-    def self.get_dayuse_plan_num rakuten_hotel_id, mode = 0
-      driver = HotelPrice.get_selenium_driver mode
+    def self.get_dayuse_plan_num rakuten_hotel_id
+      driver = HotelPrice.get_selenium_driver @mode
       driver.get "https://hotel.travel.rakuten.co.jp/hotelinfo/plan/#{rakuten_hotel_id}"
       sleep 5
       driver.find_element(:id, "du-radio").click
@@ -102,8 +108,8 @@ module HotelPrice::Rakuten
       plan_num.size
     end
 
-    def self.get_detail_class_code rakuten_hotel_id, mode = 0
-      driver = HotelPrice.get_selenium_driver mode
+    def self.get_detail_class_code rakuten_hotel_id
+      driver = HotelPrice.get_selenium_driver @mode
       driver.get "https://hotel.travel.rakuten.co.jp/hinfo/?f_no=#{rakuten_hotel_id}"
       {
         status: "found",

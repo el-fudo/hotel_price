@@ -31,7 +31,7 @@ Rakuten Travel API Reference : https://webservice.rakuten.co.jp/api/simplehotels
 
 
 ```ruby
-hotel = HotelPrice::Rakuten::RakutenScraper.new(
+hotel = HotelPrice::Rakuten::RakutenAPI.new(
   rakuten_hotel_id: "128552",
   rakuten_api_key: "api_key"
 )

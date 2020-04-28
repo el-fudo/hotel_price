@@ -38,12 +38,12 @@ module HotelPrice
 
   protected
 
-  def self.get_selenium_driver(mode = 0)
+  def self.get_selenium_driver(mode = :chrome)
     case mode
-    when 1
+    when :firefox_remote_capabilities
       firefox_capabilities = Selenium::WebDriver::Remote::Capabilities.firefox
       Selenium::WebDriver.for(:remote, url: "http://hub:4444/wd/hub", desired_capabilities: firefox_capabilities)
-    when 2
+    when :firefox
       Selenium::WebDriver.for :firefox
     else
       options = Selenium::WebDriver::Chrome::Options.new
@@ -61,6 +61,7 @@ module HotelPrice
     # Agoda API key
     # @param [String]
     attr_accessor :agoda_api_key
+    attr_accessor :selenium_driver
 
     def initialize
       @agoda_api_key = nil
