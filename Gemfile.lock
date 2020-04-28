@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    hotel_price (0.5.7)
+    hotel_price (0.5.8)
       activesupport (~> 6.0.2.1)
       json (~> 2.3.0)
       nokogiri (~> 1.10.9)
@@ -45,7 +45,7 @@ GEM
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
     thread_safe (0.3.6)
-    tzinfo (1.2.6)
+    tzinfo (1.2.7)
       thread_safe (~> 0.1)
     zeitwerk (2.3.0)
 

@@ -14,7 +14,7 @@ module HotelPrice::Rakuten
 
       query_string = make_query_string(checkin_date.to_s, num_adults)
       url = "https://hotel.travel.rakuten.co.jp/hotelinfo/plan/#{rakuten_hotel_id}?#{query_string}"
-      driver = HotelPrice.get_selenium_driver mode
+      driver = HotelPrice.get_selenium_driver @mode
       driver.get(url)
       sleep 2
       driver.find_elements(class_name: "planThumb").first rescue return ""
@@ -98,10 +98,7 @@ module HotelPrice::Rakuten
 
     def get_dayuse_plan_num rakuten_hotel_id
       driver = HotelPrice.get_selenium_driver @mode
-      driver.get "https://hotel.travel.rakuten.co.jp/hotelinfo/plan/#{rakuten_hotel_id}"
-      sleep 5
-      driver.find_element(:id, "du-radio").click
-      driver.find_element(:id, "dh-submit").click
+      driver.get "https://hotel.travel.rakuten.co.jp/hotelinfo/dayuse/?f_no=#{rakuten_hotel_id}"
       sleep 5
       plan_num = driver.find_elements(:class, "planThumb")
       driver.quit

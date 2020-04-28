@@ -1,6 +1,6 @@
 RSpec.describe HotelPrice::Rakuten::RakutenScraper, type: :class do
   describe "Rakuten Scraper" do
-    scraper = HotelPrice::Rakuten::RakutenScraper.new(:firefox)
+    scraper = HotelPrice::Rakuten::RakutenScraper.new(:chrome)
     it "should return review" do
       a1 = scraper.review 147780
       expect(a1[0][:comment]).not_to eq nil
@@ -17,7 +17,7 @@ RSpec.describe HotelPrice::Rakuten::RakutenScraper, type: :class do
     end
 
     it "should return dayuse plans number" do
-      a1 = scraper.get_dayuse_plan_num 147780
+      a1 = scraper.get_dayuse_plan_num 68565
       expect(a1).to be_an(Integer)
     end
 
